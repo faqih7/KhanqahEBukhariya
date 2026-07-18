@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sufi Heritage - Premium Islamic Portal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #F8FAFC;
+            --text-color: #0F172A;
+            --primary-color: #10B981; 
+            --primary-hover: #059669;
+            --accent-color: #F97316; 
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --sidebar-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --border-radius: 24px;
+            --glass-border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .dark-theme {
+            --bg-color: #0F172A;
+            --text-color: #F8FAFC;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --header-bg: rgba(15, 23, 42, 0.85);
+            --sidebar-bg: rgba(30, 41, 59, 0.95);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { background-color: var(--bg-color); color: var(--text-color); transition: background-color 0.3s ease, color 0.3s ease; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+
+        h1, h2, h3 { font-weight: 600; }
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+
+        .header {
+            position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 1.5rem; background: var(--header-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: var(--glass-border);
+        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .site-title { font-size: 1.25rem; font-weight: 700; color: var(--primary-color); letter-spacing: 0.5px; transition: opacity 0.3s; }
+        .icon-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 8px; border-radius: 12px; transition: background 0.3s ease; }
+        .icon-btn:hover { background: rgba(16, 185, 129, 0.1); }
+        .icon-btn svg { width: 24px; height: 24px; fill: var(--text-color); transition: fill 0.3s ease; }
+        
+        #back-btn { display: none; }
+        #back-btn svg { stroke: var(--text-color); fill: none; }
+        #menu-btn svg { stroke: var(--text-color); fill: none; }
+
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 199; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .sidebar {
+            position: fixed; top: 0; left: -320px; width: 280px; height: 100vh; background: var(--sidebar-bg);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 200; box-shadow: var(--shadow);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column;
+        }
+        .sidebar-active .sidebar { transform: translateX(320px); }
+        .sidebar-active .overlay { opacity: 1; visibility: visible; }
+        .sidebar-header { display: flex; justify-content: flex-end; padding: 1.5rem; }
+        .nav-links { list-style: none; padding: 0 1.5rem; }
+        .nav-links li { margin-bottom: 0.5rem; }
+        .nav-links a { display: block; padding: 1rem 1.25rem; border-radius: 16px; font-weight: 500; transition: all 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { background: var(--primary-color); color: #fff; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+
+        .page-section { display: none; opacity: 0; animation: fadeIn 0.4s ease forwards; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .container { padding: 1.5rem; max-width: 1200px; margin: 0 auto; }
+        .hero-img { width: 100%; height: 250px; object-fit: cover; border-radius: var(--border-radius); margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+        .hero-title { font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--primary-color); text-align: center; }
+        .hero-subtitle { font-size: 1rem; opacity: 0.8; text-align: center; margin-bottom: 2rem; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .glass-card { background: var(--card-bg); border: var(--glass-border); border-radius: var(--border-radius); padding: 1.5rem; text-align: center; box-shadow: var(--shadow); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .glass-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-bottom: 3px solid var(--accent-color); }
+        .glass-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--primary-color); }
+        .glass-card p { font-size: 0.9rem; opacity: 0.9; }
+
+        .btn-premium { display: inline-block; background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%); color: white; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 500; border: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); cursor: pointer; transition: all 0.3s ease; margin-top: 1rem; }
+        .btn-premium:hover { box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6); transform: translateY(-2px); }
+
+        .tree-container { display: flex; flex-direction: column; align-items: center; position: relative; padding: 2rem 0; }
+        .tree-container::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 4px; height: 100%; background: linear-gradient(to bottom, var(--primary-color), var(--accent-color)); z-index: 1; border-radius: 4px; }
+        .tree-node { position: relative; width: 85%; max-width: 400px; background: var(--card-bg); border: var(--glass-border); border-radius: var(--border-radius); padding: 1.5rem; text-align: center; box-shadow: var(--shadow); margin-bottom: 2.5rem; z-index: 2; border-top: 3px solid var(--primary-color); transition: transform 0.3s ease; }
+        .tree-node:hover { transform: scale(1.02); }
+
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+        .gallery-img { width: 100%; height: 140px; object-fit: cover; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; }
+        .gallery-img:hover { transform: scale(1.05); }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.9); z-index: 999; justify-content: center; align-items: center; }
+        .modal.active { display: flex; }
+        .modal img { max-width: 90%; max-height: 90%; border-radius: 16px; }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: white; border-radius: 50%; padding: 8px; cursor: pointer; }
+    </style>
+</head> 
+<body>
+    <div class="overlay" id="overlay"></div>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <button class="icon-btn" id="close-sidebar">
+                <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+        </div>
+        <ul class="nav-links">
+            <li><a data-target="home" data-title="Sufi Heritage" class="active">Home</a></li>
+            <li><a data-target="shajra-nasab" data-title="Shajra-e-Nasab">Shajra-e-Nasab</a></li>
+            <li><a data-target="shajra-tariqat" data-title="Shajra-e-Tariqat">Shajra-e-Tariqat</a></li>
+            <li><a data-target="khanqah" data-title="Khanqah">Khanqah</a></li>
+            <li><a data-target="sawaneh" data-title="Sawaneh Hayat">Sawaneh Hayat</a></li>
+            <li><a data-target="books" data-title="Kutub Khana">Books</a></li>
+            <li><a data-target="gallery" data-title="Gallery">Gallery</a></li>
+        </ul>
+    </aside>
+
+    <header class="header">
+        <div class="header-left">
+            <button class="icon-btn" id="menu-btn">
+                <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <button class="icon-btn" id="back-btn">
+                <svg viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="site-title" id="main-title">Sufi Heritage</div>
+        </div>
+        <button class="icon-btn" id="theme-toggle"></button>
+    </header>
+
+    <main class="container">
+        
+        <div id="home" class="page-section active">
+            <section class="hero-section">
+                <img src="https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=800&q=80" alt="Mazar" class="hero-img">
+                <h1 class="hero-title">Hazrat Khwaja Nizamuddin</h1>
+                <p class="hero-subtitle">Mehboob-e-Ilahi, Delhi</p>
+            </section>
+            <section class="grid-container">
+                <div class="glass-card"><h3>Wiladat</h3><p>1238 CE</p></div>
+                <div class="glass-card"><h3>Wisal</h3><p>1325 CE</p></div>
+                <div class="glass-card"><h3>Silsila</h3><p>Chishtiyya</p></div>
+                <div class="glass-card"><h3>Khanqah</h3><p>Delhi</p></div>
+            </section>
+            <section class="glass-card" style="text-align: left;">
+                <h2 style="margin-bottom: 1rem; color: var(--primary-color);">Mukhtasar Ta'aruf</h2>
+                <p style="line-height: 1.8;">Aap un azeem buzurgon mein shumar hote hain jinhon ne hindustan mein roohaniyat ki roshni phelai. Aapki talimat mohobbat, aman aur insaniyat ki khidmat par mabni hain.</p>
+                <button class="btn-premium" onclick="navigateTo('sawaneh', 'Sawaneh Hayat')">Mazid Padhein</button>
+            </section>
+        </div>
+        <div id="shajra-nasab" class="page-section">
+            <div class="tree-container">
+                <div class="tree-node"><h3>Hazrat Imam Ali</h3><p>Sher-e-Khuda</p></div>
+                <div class="tree-node"><h3>Hazrat Imam Husain</h3><p>Sayyid ash-Shuhada</p></div>
+                <div class="tree-node"><h3>Hazrat Imam Zain-ul-Abideen</h3><p>Sajjad</p></div>
+            </div>
+        </div>
+
+        <div id="shajra-tariqat" class="page-section">
+            <div class="tree-container">
+                <div class="tree-node" style="border-top-color: var(--accent-color);"><h3>Hazrat Muhammad (SAW)</h3><p>Khatam un-Nabiyyin</p></div>
+                <div class="tree-node" style="border-top-color: var(--accent-color);"><h3>Hazrat Ali (RA)</h3><p>Sher-e-Khuda</p></div>
+                <div class="tree-node" style="border-top-color: var(--accent-color);"><h3>Khwaja Hasan Basri</h3><p>Taba'i</p></div>
+            </div>
+        </div>
+
+        <div id="khanqah" class="page-section">
+            <img src="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=800&q=80" alt="Khanqah" class="hero-img">
+            <section class="glass-card" style="text-align: left;">
+                <h2 style="margin-bottom: 1rem; color: var(--primary-color);">Tareekh aur Maloomat</h2>
+                <p style="line-height: 1.8;">Yeh markaz sadiyon se roohaniyat, taleem aur tarbiyat ka mamba raha hai. Yahan daily langar aur halqa-e-zikr ka ehtemam kiya jata hai jahan har aam o khaas shamil ho sakta hai.</p>
+            </section>
+        </div>
+
+        <div id="sawaneh" class="page-section">
+            <div class="grid-container" style="grid-template-columns: 1fr;">
+                <div class="glass-card" style="text-align: left;">
+                    <h3 style="font-size: 1.4rem;">Hazrat Khwaja Moinuddin Chishti</h3>
+                    <p style="margin-bottom: 1rem; line-height: 1.6;">Gharib Nawaz ke laqab se mashhoor, aap ne Ajmer (India) mein silsila-e-chishtiyya ko farogh diya.</p>
+                    <button class="btn-premium">Mukammal Padhein</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="books" class="page-section">
+            <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="glass-card">
+                    <div style="height: 150px; background: linear-gradient(45deg, var(--primary-color), var(--accent-color)); border-radius: 12px; margin-bottom: 1rem;"></div>
+                    <h3>Kashf ul Mahjoob</h3>
+                    <p style="margin-bottom: 1rem;">Data Ganj Bakhsh</p>
+                    <button class="btn-premium" style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem;">Read</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="gallery" class="page-section">
+            <div class="gallery-grid">
+                <img src="https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=400&q=80" alt="Mazar" class="gallery-img">
+                <img src="https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=400&q=80" alt="Khanqah" class="gallery-img">
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="image-modal">
+        <button class="icon-btn modal-close" id="modal-close">
+            <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="#000" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <img src="" alt="Fullscreen" id="modal-img">
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const themeBtn = document.getElementById('theme-toggle');
+            const body = document.body;
+            const darkIcon = `<svg viewBox="0 0 24 24"><path d="M12 21a9 9 0 0 1-6.36-15.36 9 9 0 0 0 11.72 11.72A9 9 0 0 1 12 21z"/></svg>`;
+            const lightIcon = `<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 9 9 0 0 0-9-9zm0 16a7 7 0 1 1 7-7 7 7 0 0 1-7 7zM12 5a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7z"/></svg>`;
+
+            if (localStorage.getItem('theme') === 'dark') {
+                body.classList.add('dark-theme');
+                themeBtn.innerHTML = lightIcon;
+            } else {
+                themeBtn.innerHTML = darkIcon;
+            }
+
+            themeBtn.addEventListener('click', () => {
+                body.classList.toggle('dark-theme');
+                if (body.classList.contains('dark-theme')) {
+                    localStorage.setItem('theme', 'dark');
+                    themeBtn.innerHTML = lightIcon;
+                } else {
+                    localStorage.setItem('theme', 'light');
+                    themeBtn.innerHTML = darkIcon;
+                }
+            });
+
+            const menuBtn = document.getElementById('menu-btn');
+            const closeBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('overlay');
+
+            function toggleSidebar() { body.classList.toggle('sidebar-active'); }
+            menuBtn.addEventListener('click', toggleSidebar);
+            closeBtn.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', toggleSidebar);
+
+            const navLinks = document.querySelectorAll('.nav-links a');
+            const sections = document.querySelectorAll('.page-section');
+            const mainTitle = document.getElementById('main-title');
+            const backBtn = document.getElementById('back-btn');
+
+            window.navigateTo = function(targetId, title) {
+                sections.forEach(sec => sec.classList.remove('active'));
+                document.getElementById(targetId).classList.add('active');
+                mainTitle.style.opacity = 0;
+                setTimeout(() => {
+                    mainTitle.innerText = title;
+                    mainTitle.style.opacity = 1;
+                }, 300);
+
+                navLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector(`[data-target="${targetId}"]`);
+                if(activeLink) activeLink.classList.add('active');
+
+                if (targetId === 'home') {
+                    backBtn.style.display = 'none';
+                    menuBtn.style.display = 'flex';
+                } else {
+                    backBtn.style.display = 'flex';
+                    menuBtn.style.display = 'none';
+                }
+                body.classList.remove('sidebar-active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const target = e.target.getAttribute('data-target');
+                    const title = e.target.getAttribute('data-title');
+                    navigateTo(target, title);
+                });
+            });
+
+            backBtn.addEventListener('click', () => { navigateTo('home', 'Sufi Heritage'); });
+
+            const galleryImages = document.querySelectorAll('.gallery-img');
+            const modal = document.getElementById('image-modal');
+            const modalImg = document.getElementById('modal-img');
+            const modalClose = document.getElementById('modal-close');
+
+            galleryImages.forEach(img => {
+                img.addEventListener('click', () => {
+                    modalImg.src = img.src;
+                    modal.classList.add('active');
+                });
+            });
+            modalClose.addEventListener('click', () => { modal.classList.remove('active'); });
+        });
+    </script>
+</body>
+</html>
+
+
