@@ -3,37 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Khanqah E Bukhariya</title>
+    <title>Advanced Admin Panel - Sufi Heritage</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #F8FAFC; color: #0F172A; padding: 2rem; }
+        body { background: #F8FAFC; color: #0F172A; padding: 1.5rem; padding-bottom: 5rem; }
+        
         .admin-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h1 { color: #10B981; margin-bottom: 1.5rem; text-align: center; }
+        h1 { color: #10B981; margin-bottom: 1.5rem; text-align: center; font-size: 1.8rem; }
+        
         .form-group { margin-bottom: 1.5rem; }
-        label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
-        input, textarea { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 12px; font-size: 1rem; }
-        .btn { background: #10B981; color: white; padding: 0.8rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1rem; width: 100%; }
-        .btn:hover { background: #059669; }
-        .post-list { margin-top: 3rem; }
-        .post-item { display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; }
-        .btn-delete { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; }
+        label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #334155; }
+        input, select, textarea { width: 100%; padding: 0.8rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: border 0.3s; }
+        input:focus, select:focus, textarea:focus { border-color: #10B981; }
+        
+        input[type="file"] { padding: 0.5rem; background: #f8fafc; }
+        
+        .btn { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 1rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.1rem; width: 100%; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); transition: transform 0.2s; }
+        .btn:hover { transform: translateY(-2px); }
+        .btn:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .progress-text { text-align: center; color: #F97316; font-weight: 600; margin-top: 10px; display: none; }
+
+        .post-list { margin-top: 3rem; border-top: 2px solid #e2e8f0; padding-top: 2rem; }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        
+        .post-item { background: #f1f5f9; padding: 1.2rem; border-radius: 16px; margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.8rem; border-left: 5px solid #10B981; }
+        .post-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .post-badge { background: #10B981; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 500; align-self: flex-end; }
+        
+        .post-preview-img { max-width: 100px; border-radius: 8px; margin-top: 0.5rem; }
+
+        /* Success Popup Modal */
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+        .popup-box { background: white; padding: 2rem; border-radius: 24px; text-align: center; max-width: 90%; width: 350px; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .popup-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .popup-title { color: #10B981; font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .popup-btn { background: #10B981; color: white; border: none; padding: 0.6rem 2rem; border-radius: 12px; font-weight: 600; margin-top: 1.5rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="admin-container">
-        <h1>Admin Dashboard</h1>
+        <h1>Add New Content</h1>
         
-        <!-- Add Content Form -->
+        <!-- Upload Form -->
         <div id="adminForm">
             <div class="form-group">
-                <label>Title (Unwan)</label>
-                <input type="text" id="postTitle" placeholder="Article ya Buzurg ka naam likhein...">
+                <label>Page / Category (Kahan upload karna hai?)</label>
+                <select id="postCategory">
+                    <option value="articles">Latest Articles (Home)</option>
+                    <option value="shajra-nasab">Shajra-e-Nasab</option>
+                    <option value="shajra-tariqat">Shajra-e-Tariqat</option>
+                    <option value="khanqah">Khanqah</option>
+                    <option value="sawaneh">Sawaneh Hayat</option>
+                    <option value="books">Books / Kutub</option>
+                    <option value="gallery">Gallery</option>
+                </select>
             </div>
+
             <div class="form-group">
-                <label>Image URL (Tasveer ka Link)</label>
-                <input type="text" id="postImage" placeholder="Tasveer ka link yahan paste karein... (Zaroori nahi)">
+                <label>Title (Unwan)</label>
+                <input type="text" id="postTitle" placeholder="Maslan: Hazrat Khwaja Moinuddin...">
+            </div>
+
+            <div class="form-group">
+                <label>Image Upload (Mobile se tasveer chunein)</label>
+                <input type="file" id="postImage" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>Image Size (Tasveer ka size)</label>
+                <select id="postImageSize">
+                    <option value="medium">Darmiyana (Medium)</option>
+                    <option value="small">Chota (Small)</option>
+                    <option value="large">Bada (Full Width)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Content (Puri Tafseel / Mazmun)</label>
+                <textarea id="postContent" rows="6" placeholder="Yahan tafseel likhein..."></textarea>
+            </div>
+
+            <button class="btn" id="uploadBtn">Save & Upload</button>
+            <div class="progress-text" id="progressText">Tasveer upload ho rahi hai, thoda intezar karein...</div>
+        </div>
+
+        <!-- History Dashboard -->
+        <div class="post-list">
+            <div class="history-header">
+                <h2>Upload History</h2>
+                <span id="totalCount" class="post-badge">Total: 0</span>
+            </div>
+            <div id="postsContainer">
+                <p style="text-align: center; color: #666;">Data load ho raha hai...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div class="popup-overlay" id="successPopup">
+        <div class="popup-box" id="popupBox">
+            <div class="popup-icon">🎉</div>
+            <h2 class="popup-title">Khushkhabri!</h2>
+            <p>Aapka data successfully website par upload aur save ho gaya hai.</p>
+            <button class="popup-btn" onclick="closePopup()">Theek Hai</button>
+        </div>
+    </div>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-storage.js";
+
+        // Aapki Firebase Keys
+        const firebaseConfig = {
+            apiKey: "AIzaSyChM3EQOo2UNmwFnHwLc3ooq63eEm5uuh8",
+            authDomain: "khanqahebukhariya.firebaseapp.com",
+            projectId: "khanqahebukhariya",
+            storageBucket: "khanqahebukhariya.firebasestorage.app",
+            messagingSenderId: "459052789180",
+            appId: "1:459052789180:web:67ef47ee77da16275a4fb9",
+            measurementId: "G-KVBGJEWEXP"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Elements
+        const uploadBtn = document.getElementById('uploadBtn');
+        const progressText = document.getElementById('progressText');
+        const fileInput = document.getElementById('postImage');
+
+        // Upload Data Logic
+        uploadBtn.addEventListener('click', async () => {
+            const category = document.getElementById('postCategory').value;
+            const title = document.getElementById('postTitle').value;
+            const imageSize = document.getElementById('postImageSize').value;
+            const content = document.getElementById('postContent').value;
+            const file = fileInput.files[0];
+
+            if(!title || !content) {
+                alert("Unwan (Title) aur Tafseel (Content) likhna zaroori hai!");
+                return;
+            }
+
+            uploadBtn.disabled = true;
+            uploadBtn.innerText = "Processing...";
+
+            try {
+                let imageUrl = "";
+
+                // Agar Image hai toh pehle Storage me upload karo
+                if (file) {
+                    progressText.style.display = "block";
+                    const storageRef = ref(storage, 'images/' + Date.now() + '_' + file.name);
+                    const uploadTask = uploadBytesResumable(storageRef, file);
+
+                    await new Promise((resolve, reject) => {
+                        uploadTask.on('state_changed', 
+                            null, 
+                            (error) => reject(error), 
+                            async () => {
+                                imageUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                                resolve();
+                            }
+                        );
+                    });
+                }
+
+                // Firestore Database me Data Save karo
+                await addDoc(collection(db, "website_content"), {
+                    category: category,
+                    title: title,
+                    imageSize: imageSize,
+                    content: content,
+                    imageUrl: imageUrl,
+                    timestamp: new Date().getTime()
+                });
+
+                // Form Reset
+                document.getElementById('postTitle').value = '';
+                document.getElementById('postContent').value = '';
+                fileInput.value = '';
+                progressText.style.display = "none";
+                uploadBtn.disabled = false;
+                uploadBtn.innerText = "Save & Upload";
+
+                // Show Popup & Refresh List
+                showPopup();
+                loadHistory();
+
+            } catch (e) {
+                console.error(e);
+                alert("Koi masla aa gaya: " + e.message + "\nKya aapne Storage rules true kiye hain?");
+                uploadBtn.disabled = false;
+                uploadBtn.innerText = "Save & Upload";
+                progressText.style.display = "none";
+            }
+        });
+
+        // Load History Logic
+        async function loadHistory() {
+            const container = document.getElementById('postsContainer');
+            const totalCount = document.getElementById('totalCount');
+            container.innerHTML = '<p style="text-align:center;">History load ho rahi hai...</p>';
+            
+            try {
+                // Fetch data sorted by newest first
+                const q = query(collection(db, "website_content"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+                container.innerHTML = ''; 
+                
+                let count = 0;
+
+                if(querySnapshot.empty) {
+                    container.innerHTML = '<p style="text-align:center;">Abhi tak koi data upload nahi hua.</p>';
+                    totalCount.innerText = `Total: 0`;
+                    return;
+                }
+
+                querySnapshot.forEach((documentSnapshot) => {
+                    count++;
+                    const data = documentSnapshot.data();
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'post-item';
+                    
+                    // Format category name for display
+                    const catName = data.category.toUpperCase();
+
+                    let imgHtml = data.imageUrl ? `<img src="${data.imageUrl}" class="post-preview-img" alt="preview">` : '';
+
+                    itemDiv.innerHTML = `
+                        <div class="post-header">
+                            <div>
+                                <h3 style="color: #0F172A; font-size: 1.1rem; margin-bottom: 0.3rem;">${data.title}</h3>
+                                <span class="post-badge">${catName}</span>
+                                <span style="font-size: 0.8rem; color: #64748b; margin-left:10px;">Size: ${data.imageSize}</span>
+                            </div>
+                        </div>
+                        ${imgHtml}
+                    `;
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn-delete';
+                    deleteBtn.textContent = '🗑️ Delete Content';
+                    deleteBtn.addEventListener('click', async () => {
+                        if(confirm("Kya aap waqai is post ko hamesha ke liye delete karna chahte hain?")) {
+                            await deleteDoc(doc(db, "website_content", documentSnapshot.id));
+                            
+                            // Delete image from storage if exists (Optional but good practice)
+                            if(data.imageUrl) {
+                                try {
+                                    const imgRef = ref(storage, data.imageUrl);
+                                    await deleteObject(imgRef);
+                                } catch(err) { console.log("Image delete error (ignore):", err); }
+                            }
+                            
+                            alert("Content successfully delete ho gaya!");
+                            loadHistory();
+                        }
+                    });
+
+                    itemDiv.appendChild(deleteBtn);
+                    container.appendChild(itemDiv);
+                });
+
+                totalCount.innerText = `Total: ${count}`;
+
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = '<p>Error loading history.</p>';
+            }
+        }
+
+        // Popup Functions
+        window.showPopup = function() {
+            const overlay = document.getElementById('successPopup');
+            const box = document.getElementById('popupBox');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.opacity = '1';
+                box.style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        window.closePopup = function() {
+            const overlay = document.getElementById('successPopup');
+            const box = document.getElementById('popupBox');
+            overlay.style.opacity = '0';
+            box.style.transform = 'scale(0.8)';
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
+        }
+
+        // Load history on start
+        loadHistory();
+    </script>
+</body>
+</html>
             </div>
             <div class="form-group">
                 <label>Content (Tafseel)</label>
