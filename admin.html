@@ -8,82 +8,140 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #F8FAFC; color: #0F172A; padding: 1.5rem; padding-bottom: 5rem; }
+        
         .admin-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h1 { color: #10B981; margin-bottom: 1.5rem; text-align: center; font-size: 1.8rem; }
-        .form-group { margin-bottom: 1.5rem; }
+        h1 { color: #10B981; margin-bottom: 0.5rem; text-align: center; font-size: 1.8rem; }
+        .subtitle { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.9rem; }
+        
+        /* Dashboard Grid */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 2rem; }
+        .cat-card { background: #f1f5f9; border: 2px solid transparent; padding: 1.5rem 1rem; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+        .cat-card:hover { border-color: #10B981; background: #ecfdf5; transform: translateY(-5px); }
+        .cat-icon { font-size: 2rem; }
+        .cat-name { font-weight: 600; font-size: 0.95rem; color: #334155; }
+
+        .hidden { display: none !important; }
+        
+        /* Form & History Styling */
+        .back-btn { display: inline-flex; align-items: center; gap: 5px; background: #e2e8f0; border: none; padding: 8px 15px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-bottom: 1.5rem; color: #334155; transition: background 0.3s; }
+        .back-btn:hover { background: #cbd5e1; }
+        
+        .form-group { margin-bottom: 1.2rem; }
         label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #334155; }
+        .optional-tag { font-size: 0.8rem; font-weight: normal; color: #94a3b8; }
         input, select, textarea { width: 100%; padding: 0.8rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; }
         input:focus, select:focus, textarea:focus { border-color: #10B981; }
-        .btn { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 1rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.1rem; width: 100%; }
+        
+        .btn { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 1rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.1rem; width: 100%; margin-top: 1rem; }
+        
         .post-list { margin-top: 3rem; border-top: 2px solid #e2e8f0; padding-top: 2rem; }
         .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .post-item { background: #f1f5f9; padding: 1.2rem; border-radius: 16px; margin-bottom: 1rem; border-left: 5px solid #10B981; }
-        .post-badge { background: #10B981; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
-        .btn-delete { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; margin-top: 10px;}
+        .post-item { background: #f8fafc; padding: 1.2rem; border-radius: 16px; margin-bottom: 1rem; border-left: 5px solid #10B981; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .post-item h3 { font-size: 1.1rem; color: #0F172A; margin-bottom: 0.5rem; }
+        .post-info { font-size: 0.85rem; color: #64748b; margin-bottom: 10px; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; }
+        
         .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .popup-box { background: white; padding: 2rem; border-radius: 24px; text-align: center; width: 350px; }
-        .popup-btn { background: #10B981; color: white; border: none; padding: 0.6rem 2rem; border-radius: 12px; margin-top: 1.5rem; cursor: pointer; }
+        .popup-box { background: white; padding: 2rem; border-radius: 24px; text-align: center; width: 90%; max-width: 350px; }
+        .popup-btn { background: #10B981; color: white; border: none; padding: 0.6rem 2rem; border-radius: 12px; margin-top: 1.5rem; cursor: pointer; font-weight:600; }
     </style>
 </head>
 <body>
 
     <div class="admin-container">
-        <h1>Add New Content</h1>
-        <div id="adminForm">
-            <div class="form-group">
-                <label>Category (Kahan upload karna hai?)</label>
-                <select id="postCategory">
-                    <option value="articles">Latest Articles (Home)</option>
-                    <option value="shajra-nasab">Shajra-e-Nasab</option>
-                    <option value="shajra-tariqat">Shajra-e-Tariqat</option>
-                    <option value="khanqah">Khanqah</option>
-                    <option value="sawaneh">Sawaneh Hayat</option>
-                    <option value="books">Books / Kutub</option>
-                    <option value="gallery">Gallery</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Title (Unwan)</label>
-                <input type="text" id="postTitle" placeholder="Unwan likhein...">
-            </div>
-            <div class="form-group">
-                <label>Image Link (Tasveer ka Link - Agar hai)</label>
-                <input type="text" id="postImage" placeholder="Tasveer ka link paste karein...">
-            </div>
-            <div class="form-group">
-                <label>Image Size</label>
-                <select id="postImageSize">
-                    <option value="medium">Darmiyana</option>
-                    <option value="small">Chota</option>
-                    <option value="large">Bada (Full)</option>
-                </select>
-            </div>
+        
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboardView">
+            <h1>Admin Dashboard</h1>
+            <p class="subtitle">Kis category mein data upload karna hai? Niche select karein.</p>
             
-            <!-- NAYA: PDF Link ka box -->
-            <div class="form-group">
-                <label style="color:#F97316;">PDF Link (Agar kitaab hai toh Google Drive link daalein)</label>
-                <input type="text" id="postPdf" placeholder="Google Drive ka PDF link yahan paste karein...">
+            <div class="dashboard-grid">
+                <div class="cat-card" onclick="openCategory('articles', '📝 Latest Articles')">
+                    <div class="cat-icon">📝</div>
+                    <div class="cat-name">Articles (Home)</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('books', '📘 Books & Kutub')">
+                    <div class="cat-icon">📘</div>
+                    <div class="cat-name">Books / Kutub</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('gallery', '🖼️ Gallery Images')">
+                    <div class="cat-icon">🖼️</div>
+                    <div class="cat-name">Gallery</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('sawaneh', '📜 Sawaneh Hayat')">
+                    <div class="cat-icon">📜</div>
+                    <div class="cat-name">Sawaneh Hayat</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('shajra-nasab', '🌳 Shajra-e-Nasab')">
+                    <div class="cat-icon">🌳</div>
+                    <div class="cat-name">Shajra-e-Nasab</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('shajra-tariqat', '✨ Shajra-e-Tariqat')">
+                    <div class="cat-icon">✨</div>
+                    <div class="cat-name">Shajra-e-Tariqat</div>
+                </div>
+                <div class="cat-card" onclick="openCategory('khanqah', '🕌 Khanqah')">
+                    <div class="cat-icon">🕌</div>
+                    <div class="cat-name">Khanqah</div>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label>Content (Tafseel)</label>
-                <textarea id="postContent" rows="6" placeholder="Tafseel likhein..."></textarea>
-            </div>
-            <button class="btn" id="uploadBtn">Save & Upload</button>
         </div>
 
-        <div class="post-list">
-            <div class="history-header">
-                <h2>Upload History</h2>
-                <span id="totalCount" class="post-badge">Total: 0</span>
+        <!-- EDITOR & HISTORY VIEW -->
+        <div id="editorView" class="hidden">
+            <button class="back-btn" onclick="closeCategory()">⬅ Back to Dashboard</button>
+            <h1 id="activeCatTitle" style="text-align: left; margin-bottom: 1.5rem;">Category Title</h1>
+            
+            <div id="adminForm">
+                <div class="form-group">
+                    <label>Title / Unwan <span class="optional-tag">(Optional - Agar chahein toh dein)</span></label>
+                    <input type="text" id="postTitle" placeholder="Yahan title likhein...">
+                </div>
+                
+                <div class="form-group">
+                    <label style="color:#10B981;">Image Link <span class="optional-tag">(Optional)</span></label>
+                    <input type="text" id="postImage" placeholder="Tasveer ka link paste karein...">
+                </div>
+
+                <div class="form-group">
+                    <label>Image Size</label>
+                    <select id="postImageSize">
+                        <option value="medium">Darmiyana (Medium)</option>
+                        <option value="small">Chota (Small)</option>
+                        <option value="large">Bada (Full)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label style="color:#F97316;">PDF Link <span class="optional-tag">(Optional - Drive link)</span></label>
+                    <input type="text" id="postPdf" placeholder="Google Drive PDF link yahan paste karein...">
+                </div>
+
+                <div class="form-group">
+                    <label>Description / Tafseel <span class="optional-tag">(Optional)</span></label>
+                    <textarea id="postContent" rows="4" placeholder="Tafseel likhein..."></textarea>
+                </div>
+                
+                <button class="btn" id="uploadBtn">Save to Website</button>
             </div>
-            <div id="postsContainer">Data load ho raha hai...</div>
+
+            <!-- History For Active Category -->
+            <div class="post-list">
+                <div class="history-header">
+                    <h2>Uploaded Items</h2>
+                    <span id="totalCount" style="background:#10B981; color:white; padding:4px 10px; border-radius:12px; font-size:0.8rem; font-weight:bold;">Total: 0</span>
+                </div>
+                <div id="postsContainer">Data load ho raha hai...</div>
+            </div>
         </div>
+
     </div>
 
+    <!-- Popup -->
     <div class="popup-overlay" id="successPopup">
         <div class="popup-box" id="popupBox">
-            <h2 style="color: #10B981;">Upload Successful!</h2>
+            <h2 style="color: #10B981; margin-bottom:10px;">✅ Uploaded!</h2>
+            <p style="font-size: 0.9rem; color:#64748b;">Aapka data website par save ho gaya hai.</p>
             <button class="popup-btn" onclick="document.getElementById('successPopup').style.display='none'">Theek Hai</button>
         </div>
     </div>
@@ -104,64 +162,129 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        
+        let currentCategory = ""; // Kis category me kaam ho raha hai
 
+        // Navigation Functions
+        window.openCategory = function(catId, catName) {
+            currentCategory = catId;
+            document.getElementById('activeCatTitle').innerText = catName;
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('editorView').classList.remove('hidden');
+            
+            // Clear fields
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('postPdf').value = '';
+            document.getElementById('postContent').value = '';
+            
+            loadHistory(); // Load history for THIS category
+        };
+
+        window.closeCategory = function() {
+            currentCategory = "";
+            document.getElementById('editorView').classList.add('hidden');
+            document.getElementById('dashboardView').classList.remove('hidden');
+        };
+
+        // Upload Button Click
         document.getElementById('uploadBtn').addEventListener('click', async () => {
-            const category = document.getElementById('postCategory').value;
-            const title = document.getElementById('postTitle').value;
+            const title = document.getElementById('postTitle').value.trim();
             const imageSize = document.getElementById('postImageSize').value;
-            const content = document.getElementById('postContent').value;
-            const imageUrl = document.getElementById('postImage').value;
-            const pdfUrl = document.getElementById('postPdf').value; // PDF LINK LIA
+            const content = document.getElementById('postContent').value.trim();
+            const imageUrl = document.getElementById('postImage').value.trim();
+            const pdfUrl = document.getElementById('postPdf').value.trim();
 
-            if(!title || !content) { alert("Title aur Content zaroori hai!"); return; }
+            // Check if ALL fields are empty
+            if(!title && !content && !imageUrl && !pdfUrl) { 
+                alert("Koi ek cheez toh zaroor dalein! (Ya toh Title, ya Image, ya PDF)"); 
+                return; 
+            }
+
+            const btn = document.getElementById('uploadBtn');
+            btn.innerText = "Saving..."; btn.disabled = true;
 
             try {
                 await addDoc(collection(db, "website_content"), {
-                    category, title, imageSize, content, imageUrl, pdfUrl, // PDF LINK SAVE KIA
+                    category: currentCategory, 
+                    title: title, 
+                    imageSize: imageSize, 
+                    content: content, 
+                    imageUrl: imageUrl, 
+                    pdfUrl: pdfUrl,
                     timestamp: new Date().getTime()
                 });
                 
+                // Clear fields
                 document.getElementById('postTitle').value = '';
                 document.getElementById('postContent').value = '';
                 document.getElementById('postImage').value = '';
-                document.getElementById('postPdf').value = ''; // NAYA
+                document.getElementById('postPdf').value = '';
                 
                 document.getElementById('successPopup').style.display = 'flex';
-                loadHistory();
-            } catch (e) { alert("Error: " + e.message); }
+                loadHistory(); // Refresh history
+            } catch (e) { 
+                alert("Error: " + e.message); 
+            }
+            
+            btn.innerText = "Save to Website"; btn.disabled = false;
         });
 
+        // Load History specifically for Current Category
         async function loadHistory() {
             const container = document.getElementById('postsContainer');
             const totalCount = document.getElementById('totalCount');
+            container.innerHTML = 'Load ho raha hai...';
+            
             try {
                 const q = query(collection(db, "website_content"), orderBy("timestamp", "desc"));
                 const querySnapshot = await getDocs(q);
                 container.innerHTML = ''; 
                 let count = 0;
+                
                 querySnapshot.forEach((documentSnapshot) => {
-                    count++;
                     const data = documentSnapshot.data();
-                    const itemDiv = document.createElement('div');
-                    itemDiv.className = 'post-item';
-                    itemDiv.innerHTML = `<h3>${data.title}</h3><span class="post-badge">${data.category.toUpperCase()}</span>`;
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'btn-delete';
-                    deleteBtn.textContent = '🗑️ Delete Content';
-                    deleteBtn.addEventListener('click', async () => {
-                        if(confirm("Waqa'i delete karna chahte hain?")) {
-                            await deleteDoc(doc(db, "website_content", documentSnapshot.id));
-                            loadHistory();
-                        }
-                    });
-                    itemDiv.appendChild(deleteBtn);
-                    container.appendChild(itemDiv);
+                    
+                    // SIRF WAHI DATA DIKHAO JO IS CATEGORY KA HAI
+                    if(data.category === currentCategory) {
+                        count++;
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'post-item';
+                        
+                        let displayTitle = data.title ? data.title : (data.pdfUrl ? "📘 PDF File" : "🖼️ Image Only");
+                        
+                        itemDiv.innerHTML = `
+                            <h3>${displayTitle}</h3>
+                            <div class="post-info">
+                                ${data.imageUrl ? '✓ Image ' : ''} 
+                                ${data.pdfUrl ? '✓ PDF ' : ''} 
+                                ${data.content ? '✓ Description' : ''}
+                            </div>
+                        `;
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'btn-delete';
+                        deleteBtn.textContent = '🗑️ Delete';
+                        deleteBtn.addEventListener('click', async () => {
+                            if(confirm("Waqa'i delete karna chahte hain?")) {
+                                await deleteDoc(doc(db, "website_content", documentSnapshot.id));
+                                loadHistory();
+                            }
+                        });
+                        itemDiv.appendChild(deleteBtn);
+                        container.appendChild(itemDiv);
+                    }
                 });
+                
+                if(count === 0) {
+                    container.innerHTML = '<p style="color:#94a3b8; font-style:italic;">Abhi tak is page par kuch upload nahi kiya gaya.</p>';
+                }
                 totalCount.innerText = `Total: ${count}`;
-            } catch (e) {}
+            } catch (e) {
+                console.log(e);
+            }
         }
-        loadHistory();
     </script>
 </body>
-    </html>
+                        </html>
     
