@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Khanqah E Bukhariya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #F8FAFC; color: #0F172A; padding: 2rem; }
+        .admin-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        h1 { color: #10B981; margin-bottom: 1.5rem; text-align: center; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
+        input, textarea { width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 12px; font-size: 1rem; }
+        .btn { background: #10B981; color: white; padding: 0.8rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1rem; width: 100%; }
+        .btn:hover { background: #059669; }
+        .post-list { margin-top: 3rem; }
+        .post-item { display: flex; justify-content: space-between; align-items: center; background: #f1f5f9; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <h1>Admin Dashboard</h1>
+        
+        <!-- Add Content Form -->
+        <div id="adminForm">
+            <div class="form-group">
+                <label>Title (Unwan)</label>
+                <input type="text" id="postTitle" placeholder="Article ya Buzurg ka naam likhein...">
+            </div>
+            <div class="form-group">
+                <label>Image URL (Tasveer ka Link)</label>
+                <input type="text" id="postImage" placeholder="Tasveer ka link yahan paste karein... (Zaroori nahi)">
+            </div>
+            <div class="form-group">
+                <label>Content (Tafseel)</label>
+                <textarea id="postContent" rows="5" placeholder="Puri tafseel yahan likhein..."></textarea>
+            </div>
+            <button class="btn" id="uploadBtn">Upload Content</button>
+        </div>
+
+        <!-- List of Uploaded Content -->
+        <div class="post-list">
+            <h2 style="margin-bottom: 1rem; font-size: 1.2rem;">Mojooda Articles</h2>
+            <div id="postsContainer">
+                <p style="text-align: center; color: #666;">Data load ho raha hai...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Database Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+        // Aapki di hui Firebase Keys
+        const firebaseConfig = {
+            apiKey: "AIzaSyChM3EQOo2UNmwFnHwLc3ooq63eEm5uuh8",
+            authDomain: "khanqahebukhariya.firebaseapp.com",
+            projectId: "khanqahebukhariya",
+            storageBucket: "khanqahebukhariya.firebasestorage.app",
+            messagingSenderId: "459052789180",
+            appId: "1:459052789180:web:67ef47ee77da16275a4fb9",
+            measurementId: "G-KVBGJEWEXP"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Upload Button Logic
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+            const title = document.getElementById('postTitle').value;
+            const image = document.getElementById('postImage').value;
+            const content = document.getElementById('postContent').value;
+
+            if(!title || !content) {
+                alert("Title aur Content likhna zaroori hai!");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "articles"), {
+                    title: title,
+                    image: image,
+                    content: content,
+                    timestamp: new Date().getTime()
+                });
+                alert("Zabardast! Data successfully upload ho gaya.");
+                document.getElementById('postTitle').value = '';
+                document.getElementById('postImage').value = '';
+                document.getElementById('postContent').value = '';
+                loadPosts(); // Data refresh
+            } catch (e) {
+                alert("Error: " + e.message);
+            }
+        });
+
+        // Load and Show Data Logic
+        async function loadPosts() {
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = '<p style="text-align:center;">Data load ho raha hai...</p>';
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, "articles"));
+                container.innerHTML = ''; 
+                
+                if(querySnapshot.empty) {
+                    container.innerHTML = '<p style="text-align:center;">Abhi tak koi article add nahi hua.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((documentSnapshot) => {
+                    const data = documentSnapshot.data();
+                    
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'post-item';
+                    
+                    const titleDiv = document.createElement('div');
+                    titleDiv.innerHTML = `<strong>${data.title}</strong>`;
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'btn-delete';
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.addEventListener('click', async () => {
+                        if(confirm("Kya aap waqai isey delete karna chahte hain?")) {
+                            await deleteDoc(doc(db, "articles", documentSnapshot.id));
+                            alert("Article delete ho gaya!");
+                            loadPosts();
+                        }
+                    });
+
+                    itemDiv.appendChild(titleDiv);
+                    itemDiv.appendChild(deleteBtn);
+                    container.appendChild(itemDiv);
+                });
+            } catch (e) {
+                container.innerHTML = '<p>Error loading data.</p>';
+            }
+        }
+
+        loadPosts();
+    </script>
+</body>
+              </html>
+  
