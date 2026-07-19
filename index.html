@@ -6,51 +6,106 @@
     <title>Sufi Heritage - Premium Islamic Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #F8FAFC; --text-color: #0F172A; --primary-color: #10B981; --accent-color: #F97316; --card-bg: rgba(255, 255, 255, 0.8); --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-color); color: var(--text-color); }
+        :root { 
+            --bg-color: #F8FAFC; 
+            --text-color: #0F172A; 
+            --primary-color: #10B981; 
+            --accent-color: #F97316; 
+            --card-bg: rgba(255, 255, 255, 0.9); 
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); 
+        }
+        .dark-theme { 
+            --bg-color: #0F172A; 
+            --text-color: #F8FAFC; 
+            --card-bg: rgba(30, 41, 59, 0.9); 
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); 
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent;}
+        body { background: var(--bg-color); color: var(--text-color); overflow-x:hidden; transition: background 0.3s, color 0.3s;}
         a { text-decoration: none; }
-        .header { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; padding: 1rem; background: var(--card-bg); backdrop-filter: blur(10px); }
-        .site-title { font-size: 1.25rem; font-weight: 700; color: var(--primary-color); }
-        .icon-btn { background: none; border: none; padding: 8px; cursor: pointer; }
-        .icon-btn svg { width: 24px; height: 24px; stroke: var(--text-color); fill: none; }
-        .sidebar { position: fixed; top: 0; left: -320px; width: 280px; height: 100vh; background: var(--card-bg); z-index: 200; transition: transform 0.3s; padding: 1rem; }
+        
+        /* Header & Title */
+        .header { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--card-bg); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
+        .site-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); text-align: center; flex: 1; transition: opacity 0.3s;}
+        
+        /* Buttons */
+        .icon-btn { background: none; border: none; padding: 8px; cursor: pointer; border-radius: 12px; transition: background 0.2s;}
+        .icon-btn:hover { background: rgba(16, 185, 129, 0.1); }
+        .icon-btn svg { width: 26px; height: 26px; stroke: var(--text-color); fill: none; transition: stroke 0.3s; }
+        
+        /* Overlay & Sidebar */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.5); z-index: 150; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(2px);}
+        .sidebar { position: fixed; top: 0; left: -320px; width: 280px; height: 100vh; background: var(--card-bg); z-index: 200; transition: transform 0.3s ease-out; padding: 1rem; box-shadow: 2px 0 15px rgba(0,0,0,0.1);}
         .sidebar-active .sidebar { transform: translateX(320px); }
-        .nav-links { list-style: none; margin-top: 2rem; }
-        .nav-links a { display: block; padding: 1rem; font-weight: 500; cursor: pointer; }
-        .nav-links a:hover, .nav-links a.active { background: var(--primary-color); color: white; border-radius: 12px; }
-        .page-section { display: none; padding: 1rem; }
-        .page-section.active { display: block; }
+        .sidebar-active .overlay { opacity: 1; visibility: visible; }
+        
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 1rem; margin-bottom: 1rem;}
+        .sidebar-title { font-weight: 700; color: var(--primary-color); font-size: 1.2rem; margin-left: 10px;}
+        
+        .nav-links { list-style: none; }
+        .nav-links a { display: block; padding: 1rem; font-weight: 500; cursor: pointer; color: var(--text-color); margin-bottom: 5px; border-radius: 12px; transition: 0.2s;}
+        .nav-links a:hover, .nav-links a.active { background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
+        
+        /* Page Sections */
+        .page-section { display: none; padding: 1.5rem 1rem; max-width: 800px; margin: 0 auto;}
+        .page-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Cards */
         .grid-container { display: grid; gap: 1.5rem; }
-        .glass-card { background: var(--card-bg); padding: 1.5rem; border-radius: 24px; box-shadow: var(--shadow); }
+        .glass-card { background: var(--card-bg); padding: 1.5rem; border-radius: 24px; box-shadow: var(--shadow); transition: transform 0.2s;}
+        .glass-card:hover { transform: translateY(-3px); border-bottom: 3px solid var(--primary-color);}
+        
         .img-small { width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
         .img-medium { width: 100%; height: 300px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
-        .img-large { width: 100%; height: auto; border-radius: 16px; margin-bottom: 1rem; }
-        .card-title { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .img-large { width: 100%; height: auto; max-height:500px; object-fit: contain; border-radius: 16px; margin-bottom: 1rem; background: #000; }
+        
+        .card-title { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
         .card-content { line-height: 1.8; white-space: pre-wrap; margin-bottom: 1rem; }
-        .pdf-btn { display: inline-block; background: var(--accent-color); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3); }
+        .pdf-btn { display: inline-block; background: var(--accent-color); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3); margin-top: 5px;}
+        
         .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .gallery-item img { width: 100%; height: 150px; object-fit: cover; border-radius: 12px; }
+        .gallery-item img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow);}
+        .empty-text { text-align: center; padding: 2rem; color: #94a3b8; font-style: italic; }
     </style>
 </head>
 <body>
+    
+    <!-- Background Dark Overlay for Menu -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Sidebar / Menu -->
     <aside class="sidebar">
-        <button class="icon-btn" id="close-sidebar" style="float:right;"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-width="2"/></svg></button>
+        <div class="sidebar-header">
+            <span class="sidebar-title">Menu</span>
+            <!-- Close Button -->
+            <button class="icon-btn" id="close-sidebar">
+                <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+        </div>
         <ul class="nav-links">
-            <li><a data-target="articles" class="active">Home (Articles)</a></li>
-            <li><a data-target="shajra-nasab">Shajra-e-Nasab</a></li>
-            <li><a data-target="shajra-tariqat">Shajra-e-Tariqat</a></li>
-            <li><a data-target="khanqah">Khanqah</a></li>
-            <li><a data-target="sawaneh">Sawaneh Hayat</a></li>
-            <li><a data-target="books">Books / Kutub</a></li>
-            <li><a data-target="gallery">Gallery</a></li>
+            <li><a data-target="articles" data-title="Home (Articles)" class="active">Home (Articles)</a></li>
+            <li><a data-target="shajra-nasab" data-title="Shajra-e-Nasab">Shajra-e-Nasab</a></li>
+            <li><a data-target="shajra-tariqat" data-title="Shajra-e-Tariqat">Shajra-e-Tariqat</a></li>
+            <li><a data-target="khanqah" data-title="Khanqah">Khanqah</a></li>
+            <li><a data-target="sawaneh" data-title="Sawaneh Hayat">Sawaneh Hayat</a></li>
+            <li><a data-target="books" data-title="Books / Kutub">Books / Kutub</a></li>
+            <li><a data-target="gallery" data-title="Gallery">Gallery</a></li>
         </ul>
     </aside>
 
+    <!-- Header (Menu Btn, Dynamic Title, Theme Toggle) -->
     <header class="header">
-        <button class="icon-btn" id="menu-btn"><svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18" stroke-width="2"/></svg></button>
-        <div class="site-title">Sufi Heritage</div>
-        <div style="width:24px;"></div>
+        <button class="icon-btn" id="menu-btn">
+            <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        
+        <div class="site-title" id="page-title">Home (Articles)</div>
+        
+        <button class="icon-btn" id="theme-toggle">
+            <!-- SVG Icon for Dark/Light Mode handled via JS -->
+        </button>
     </header>
 
     <main>
@@ -63,20 +118,62 @@
         <div id="gallery" class="page-section"><div id="content-gallery" class="gallery-grid"></div></div>
     </main>
 
+    <!-- UI Logic (Menu, Title, Dark Mode) -->
     <script>
+        // Menu Toggle Logic
+        const closeMenu = () => document.body.classList.remove('sidebar-active');
         document.getElementById('menu-btn').addEventListener('click', () => document.body.classList.add('sidebar-active'));
-        document.getElementById('close-sidebar').addEventListener('click', () => document.body.classList.remove('sidebar-active'));
+        document.getElementById('close-sidebar').addEventListener('click', closeMenu);
+        document.getElementById('overlay').addEventListener('click', closeMenu); // Bahar click karne par band
+
+        // Page Change & Dynamic Title Logic
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', (e) => {
+                // Remove active classes
                 document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
                 document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-                document.getElementById(e.target.getAttribute('data-target')).classList.add('active');
+                
+                // Add active to clicked target
+                const target = e.target.getAttribute('data-target');
+                const title = e.target.getAttribute('data-title');
+                
+                document.getElementById(target).classList.add('active');
                 e.target.classList.add('active');
-                document.body.classList.remove('sidebar-active');
+                
+                // Set Header Title
+                document.getElementById('page-title').innerText = title;
+                
+                closeMenu(); // Click ke baad menu band
+                window.scrollTo(0,0);
             });
+        });
+
+        // Dark Mode Logic
+        const themeBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        const sunIcon = `<svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2" stroke-linecap="round"/></svg>`;
+        const moonIcon = `<svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+        if (localStorage.getItem('theme') === 'dark') { 
+            body.classList.add('dark-theme'); 
+            themeBtn.innerHTML = sunIcon; 
+        } else { 
+            themeBtn.innerHTML = moonIcon; 
+        }
+
+        themeBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            if (body.classList.contains('dark-theme')) { 
+                localStorage.setItem('theme', 'dark'); 
+                themeBtn.innerHTML = sunIcon; 
+            } else { 
+                localStorage.setItem('theme', 'light'); 
+                themeBtn.innerHTML = moonIcon; 
+            }
         });
     </script>
 
+    <!-- Firebase Data Fetching -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
@@ -96,32 +193,46 @@
             let containers = {};
             categories.forEach(c => { containers[c] = document.getElementById(`content-${c}`); if(containers[c]) containers[c].innerHTML = ''; });
             
-            const q = query(collection(db, "website_content"), orderBy("timestamp", "desc"));
-            const snapshot = await getDocs(q);
-            
-            snapshot.forEach((doc) => {
-                const data = doc.data();
-                if(containers[data.category]) {
-                    if (data.category === "gallery" && data.imageUrl) {
-                        containers[data.category].innerHTML += `<div class="gallery-item"><img src="${data.imageUrl}"></div>`;
-                    } else {
-                        let imgClass = data.imageSize === "small" ? "img-small" : (data.imageSize === "large" ? "img-large" : "img-medium");
-                        let imgHtml = data.imageUrl ? `<img src="${data.imageUrl}" class="${imgClass}">` : '';
-                        
-                        // NAYA: PDF Button Logic
-                        let pdfHtml = data.pdfUrl ? `<a href="${data.pdfUrl}" target="_blank" class="pdf-btn">📘 Kitaab Padhein / Download</a>` : '';
-                        
-                        containers[data.category].innerHTML += `
-                            <div class="glass-card">
-                                ${imgHtml}
-                                <h3 class="card-title">${data.title}</h3>
-                                <div class="card-content">${data.content}</div>
-                                ${pdfHtml}
-                            </div>
-                        `;
+            try {
+                const q = query(collection(db, "website_content"), orderBy("timestamp", "desc"));
+                const snapshot = await getDocs(q);
+                
+                let count = { articles:0, "shajra-nasab":0, "shajra-tariqat":0, khanqah:0, sawaneh:0, books:0, gallery:0 };
+                
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const cat = data.category;
+                    
+                    if(containers[cat]) {
+                        count[cat]++;
+                        if (cat === "gallery" && data.imageUrl) {
+                            containers[cat].innerHTML += `<div class="gallery-item"><img src="${data.imageUrl}"></div>`;
+                        } else {
+                            let imgClass = data.imageSize === "small" ? "img-small" : (data.imageSize === "large" ? "img-large" : "img-medium");
+                            let imgHtml = data.imageUrl ? `<img src="${data.imageUrl}" class="${imgClass}">` : '';
+                            let titleHtml = data.title ? `<h3 class="card-title">${data.title}</h3>` : '';
+                            let contentHtml = data.content ? `<div class="card-content">${data.content}</div>` : '';
+                            let pdfHtml = data.pdfUrl ? `<a href="${data.pdfUrl}" target="_blank" class="pdf-btn">📘 Kitaab Padhein / Download</a>` : '';
+                            
+                            containers[cat].innerHTML += `
+                                <div class="glass-card">
+                                    ${imgHtml}
+                                    ${titleHtml}
+                                    ${contentHtml}
+                                    ${pdfHtml}
+                                </div>
+                            `;
+                        }
                     }
-                }
-            });
+                });
+                
+                categories.forEach(c => {
+                    if(count[c] === 0 && containers[c]) {
+                        containers[c].innerHTML = `<div class="empty-text">Abhi is page par maloomat mojood nahi hain.</div>`;
+                    }
+                });
+
+            } catch(e) { console.log(e); }
         }
         fetchAllData();
     </script>
