@@ -3,38 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sufi Heritage - Premium Islamic Portal</title>
+    <title>Khanqah E Bukhariya</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --bg-color: #F8FAFC; 
-            --text-color: #0F172A; 
-            --primary-color: #10B981; 
-            --accent-color: #F97316; 
-            --card-bg: rgba(255, 255, 255, 0.9); 
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); 
-        }
-        .dark-theme { 
-            --bg-color: #0F172A; 
-            --text-color: #F8FAFC; 
-            --card-bg: rgba(30, 41, 59, 0.9); 
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); 
-        }
+        :root { --bg-color: #F8FAFC; --text-color: #0F172A; --primary-color: #10B981; --accent-color: #F97316; --card-bg: rgba(255, 255, 255, 0.9); --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
+        .dark-theme { --bg-color: #0F172A; --text-color: #F8FAFC; --card-bg: rgba(30, 41, 59, 0.9); --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
         
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent;}
         body { background: var(--bg-color); color: var(--text-color); overflow-x:hidden; transition: background 0.3s, color 0.3s;}
         a { text-decoration: none; }
         
-        /* Header & Title */
         .header { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--card-bg); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
-        .site-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); text-align: center; flex: 1; transition: opacity 0.3s;}
+        .site-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); text-align: center; flex: 1;}
         
-        /* Buttons */
         .icon-btn { background: none; border: none; padding: 8px; cursor: pointer; border-radius: 12px; transition: background 0.2s;}
         .icon-btn:hover { background: rgba(16, 185, 129, 0.1); }
         .icon-btn svg { width: 26px; height: 26px; stroke: var(--text-color); fill: none; transition: stroke 0.3s; }
         
-        /* Overlay & Sidebar */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.5); z-index: 150; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(2px);}
         .sidebar { position: fixed; top: 0; left: -320px; width: 280px; height: 100vh; background: var(--card-bg); z-index: 200; transition: transform 0.3s ease-out; padding: 1rem; box-shadow: 2px 0 15px rgba(0,0,0,0.1);}
         .sidebar-active .sidebar { transform: translateX(320px); }
@@ -47,15 +32,12 @@
         .nav-links a { display: block; padding: 1rem; font-weight: 500; cursor: pointer; color: var(--text-color); margin-bottom: 5px; border-radius: 12px; transition: 0.2s;}
         .nav-links a:hover, .nav-links a.active { background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
         
-        /* Page Sections */
         .page-section { display: none; padding: 1.5rem 1rem; max-width: 800px; margin: 0 auto;}
         .page-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Cards */
         .grid-container { display: grid; gap: 1.5rem; }
         .glass-card { background: var(--card-bg); padding: 1.5rem; border-radius: 24px; box-shadow: var(--shadow); transition: transform 0.2s;}
-        .glass-card:hover { transform: translateY(-3px); border-bottom: 3px solid var(--primary-color);}
         
         .img-small { width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
         .img-medium { width: 100%; height: 300px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
@@ -63,7 +45,7 @@
         
         .card-title { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
         .card-content { line-height: 1.8; white-space: pre-wrap; margin-bottom: 1rem; }
-        .pdf-btn { display: inline-block; background: var(--accent-color); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; box-shadow: 0 4px 10px rgba(249, 115, 22, 0.3); margin-top: 5px;}
+        .pdf-btn { display: inline-block; background: var(--accent-color); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; margin-top: 5px;}
         
         .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .gallery-item img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow);}
@@ -72,20 +54,17 @@
 </head>
 <body>
     
-    <!-- Background Dark Overlay for Menu -->
     <div class="overlay" id="overlay"></div>
     
-    <!-- Sidebar / Menu -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <span class="sidebar-title">Menu</span>
-            <!-- Close Button -->
             <button class="icon-btn" id="close-sidebar">
                 <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/></svg>
             </button>
         </div>
         <ul class="nav-links">
-            <li><a data-target="articles" data-title="Home (Articles)" class="active">Home (Articles)</a></li>
+            <li><a data-target="articles" data-title="Home" class="active">Home</a></li>
             <li><a data-target="shajra-nasab" data-title="Shajra-e-Nasab">Shajra-e-Nasab</a></li>
             <li><a data-target="shajra-tariqat" data-title="Shajra-e-Tariqat">Shajra-e-Tariqat</a></li>
             <li><a data-target="khanqah" data-title="Khanqah">Khanqah</a></li>
@@ -95,17 +74,12 @@
         </ul>
     </aside>
 
-    <!-- Header (Menu Btn, Dynamic Title, Theme Toggle) -->
     <header class="header">
         <button class="icon-btn" id="menu-btn">
             <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
-        
-        <div class="site-title" id="page-title">Home (Articles)</div>
-        
-        <button class="icon-btn" id="theme-toggle">
-            <!-- SVG Icon for Dark/Light Mode handled via JS -->
-        </button>
+        <div class="site-title" id="page-title">Home</div>
+        <button class="icon-btn" id="theme-toggle"></button>
     </header>
 
     <main>
@@ -118,34 +92,67 @@
         <div id="gallery" class="page-section"><div id="content-gallery" class="gallery-grid"></div></div>
     </main>
 
-    <!-- UI Logic (Menu, Title, Dark Mode) -->
     <script>
-        // Menu Toggle Logic
-        const closeMenu = () => document.body.classList.remove('sidebar-active');
-        document.getElementById('menu-btn').addEventListener('click', () => document.body.classList.add('sidebar-active'));
-        document.getElementById('close-sidebar').addEventListener('click', closeMenu);
-        document.getElementById('overlay').addEventListener('click', closeMenu); // Bahar click karne par band
+        // SMART NAVIGATION (Mobile App Like Behavior)
+        let currentPage = 'articles';
+        history.replaceState({page: 'articles'}, "", "#articles");
 
-        // Page Change & Dynamic Title Logic
+        function switchPageUI(target, title) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+            document.getElementById(target).classList.add('active');
+            document.querySelector(`[data-target="${target}"]`).classList.add('active');
+            document.getElementById('page-title').innerText = title;
+            window.scrollTo(0,0);
+        }
+
+        // Open Menu (and push state so back button closes it)
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.body.classList.add('sidebar-active');
+            history.pushState({menu: true}, "", "#menu");
+        });
+
+        // Close Menu Function
+        const closeMenu = (fromPopState = false) => {
+            document.body.classList.remove('sidebar-active');
+            if(!fromPopState && location.hash === '#menu') history.back();
+        };
+
+        document.getElementById('close-sidebar').addEventListener('click', () => closeMenu());
+        document.getElementById('overlay').addEventListener('click', () => closeMenu());
+
+        // Nav Link Click
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', (e) => {
-                // Remove active classes
-                document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-                document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-                
-                // Add active to clicked target
                 const target = e.target.getAttribute('data-target');
                 const title = e.target.getAttribute('data-title');
                 
-                document.getElementById(target).classList.add('active');
-                e.target.classList.add('active');
+                switchPageUI(target, title);
+                currentPage = target;
                 
-                // Set Header Title
-                document.getElementById('page-title').innerText = title;
-                
-                closeMenu(); // Click ke baad menu band
-                window.scrollTo(0,0);
+                // Naya page state push karo (Taki back dabane par previous state yani Menu open ho!)
+                history.pushState({page: target}, "", "#" + target);
+                document.body.classList.remove('sidebar-active');
             });
+        });
+
+        // Hardware Back Button Listener
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.menu) {
+                // Back button dabane par menu khul gaya
+                document.body.classList.add('sidebar-active');
+                switchPageUI(currentPage, document.querySelector(`[data-target="${currentPage}"]`).getAttribute('data-title'));
+            } else if (e.state && e.state.page) {
+                // Jab menu khula ho aur wahan se page par wapas jayein
+                document.body.classList.remove('sidebar-active');
+                currentPage = e.state.page;
+                switchPageUI(e.state.page, document.querySelector(`[data-target="${e.state.page}"]`).getAttribute('data-title'));
+            } else {
+                // Shuruwati halat mein
+                document.body.classList.remove('sidebar-active');
+                currentPage = 'articles';
+                switchPageUI('articles', 'Home');
+            }
         });
 
         // Dark Mode Logic
@@ -154,22 +161,13 @@
         const sunIcon = `<svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2" stroke-linecap="round"/></svg>`;
         const moonIcon = `<svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-        if (localStorage.getItem('theme') === 'dark') { 
-            body.classList.add('dark-theme'); 
-            themeBtn.innerHTML = sunIcon; 
-        } else { 
-            themeBtn.innerHTML = moonIcon; 
-        }
+        if (localStorage.getItem('theme') === 'dark') { body.classList.add('dark-theme'); themeBtn.innerHTML = sunIcon; } 
+        else { themeBtn.innerHTML = moonIcon; }
 
         themeBtn.addEventListener('click', () => {
             body.classList.toggle('dark-theme');
-            if (body.classList.contains('dark-theme')) { 
-                localStorage.setItem('theme', 'dark'); 
-                themeBtn.innerHTML = sunIcon; 
-            } else { 
-                localStorage.setItem('theme', 'light'); 
-                themeBtn.innerHTML = moonIcon; 
-            }
+            if (body.classList.contains('dark-theme')) { localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = sunIcon; } 
+            else { localStorage.setItem('theme', 'light'); themeBtn.innerHTML = moonIcon; }
         });
     </script>
 
@@ -196,7 +194,6 @@
             try {
                 const q = query(collection(db, "website_content"), orderBy("timestamp", "desc"));
                 const snapshot = await getDocs(q);
-                
                 let count = { articles:0, "shajra-nasab":0, "shajra-tariqat":0, khanqah:0, sawaneh:0, books:0, gallery:0 };
                 
                 snapshot.forEach((doc) => {
@@ -231,11 +228,9 @@
                         containers[c].innerHTML = `<div class="empty-text">Abhi is page par maloomat mojood nahi hain.</div>`;
                     }
                 });
-
             } catch(e) { console.log(e); }
         }
         fetchAllData();
     </script>
 </body>
-    </html>
-    
+</html>
