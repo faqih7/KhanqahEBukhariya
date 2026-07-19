@@ -3,29 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Admin Panel - Sufi Heritage</title>
+    <title>Admin Panel - Khanqah E Bukhariya</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #F8FAFC; color: #0F172A; padding: 1.5rem; padding-bottom: 5rem; }
-        
         .admin-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         h1 { color: #10B981; margin-bottom: 0.5rem; text-align: center; font-size: 1.8rem; }
         .subtitle { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.9rem; }
         
-        /* Dashboard Grid & SVG Icons */
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 2rem; }
         .cat-card { background: #f1f5f9; border: 2px solid transparent; padding: 1.5rem 1rem; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
         .cat-card:hover { border-color: #10B981; background: #ecfdf5; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(16,185,129,0.1); }
-        
-        /* SVG Styling */
         .cat-icon svg { width: 32px; height: 32px; stroke: #10B981; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: 0.3s; }
         .cat-card:hover .cat-icon svg { transform: scale(1.1); }
         .cat-name { font-weight: 600; font-size: 0.95rem; color: #334155; }
-
         .hidden { display: none !important; }
         
-        /* Form & History Styling */
         .back-btn { display: inline-flex; align-items: center; gap: 8px; background: #e2e8f0; border: none; padding: 8px 15px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-bottom: 1.5rem; color: #334155; transition: background 0.3s; }
         .back-btn svg { width: 18px; height: 18px; stroke: #334155; stroke-width: 2; fill: none; }
         .back-btn:hover { background: #cbd5e1; }
@@ -35,28 +29,21 @@
         .optional-tag { font-size: 0.8rem; font-weight: normal; color: #94a3b8; }
         input, select, textarea { width: 100%; padding: 0.8rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s;}
         input:focus, select:focus, textarea:focus { border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
-        
         .btn { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 1rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.1rem; width: 100%; margin-top: 1rem; transition: 0.3s;}
-        .btn:hover { box-shadow: 0 5px 15px rgba(16,185,129,0.3); }
         
         .post-list { margin-top: 3rem; border-top: 2px solid #e2e8f0; padding-top: 2rem; }
         .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        
         .post-item { background: #f8fafc; padding: 1.2rem; border-radius: 16px; margin-bottom: 1rem; border-left: 5px solid #10B981; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
         .post-item h3 { font-size: 1.1rem; color: #0F172A; margin-bottom: 0.5rem; }
         .post-info { font-size: 0.85rem; color: #64748b; margin-bottom: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
         .badge-tag { background: #e2e8f0; padding: 3px 8px; border-radius: 8px; font-weight: 500;}
-        
         .btn-delete { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px; transition: 0.2s;}
         .btn-delete svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; }
-        .btn-delete:hover { background: #dc2626; }
         
-        /* Popup Styling */
         .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .popup-box { background: white; padding: 2.5rem 2rem; border-radius: 24px; text-align: center; width: 90%; max-width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .popup-box { background: white; padding: 2.5rem 2rem; border-radius: 24px; text-align: center; width: 90%; max-width: 350px; }
         .popup-icon svg { width: 64px; height: 64px; stroke: #10B981; fill: none; stroke-width: 2; margin-bottom: 15px; }
-        .popup-btn { background: #10B981; color: white; border: none; padding: 0.8rem 2rem; border-radius: 12px; margin-top: 1.5rem; cursor: pointer; font-weight:600; width: 100%; transition: 0.3s;}
-        .popup-btn:hover { background: #059669; }
+        .popup-btn { background: #10B981; color: white; border: none; padding: 0.8rem 2rem; border-radius: 12px; margin-top: 1.5rem; cursor: pointer; font-weight:600; width: 100%; }
     </style>
 </head>
 <body>
@@ -65,19 +52,19 @@
         
         <!-- DASHBOARD VIEW -->
         <div id="dashboardView">
-            <h1>Admin Dashboard</h1>
-            <p class="subtitle">Kis category mein data upload karna hai? Niche select karein.</p>
+            <h1>Khanqah E Bukhariya</h1>
+            <p class="subtitle">Admin Dashboard - Category select karein</p>
             
             <div class="dashboard-grid">
-                <div class="cat-card" onclick="openCategory('articles', 'Latest Articles')">
+                <div class="cat-card" onclick="openCategory('articles', 'Home')">
                     <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
-                    <div class="cat-name">Articles (Home)</div>
+                    <div class="cat-name">Home</div>
                 </div>
                 <div class="cat-card" onclick="openCategory('books', 'Books & Kutub')">
                     <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
                     <div class="cat-name">Books / Kutub</div>
                 </div>
-                <div class="cat-card" onclick="openCategory('gallery', 'Gallery Images')">
+                <div class="cat-card" onclick="openCategory('gallery', 'Gallery')">
                     <div class="cat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
                     <div class="cat-name">Gallery</div>
                 </div>
@@ -100,9 +87,10 @@
             </div>
         </div>
 
-        <!-- EDITOR & HISTORY VIEW -->
+        <!-- EDITOR VIEW -->
         <div id="editorView" class="hidden">
-            <button class="back-btn" onclick="closeCategory()">
+            <!-- UI Button calling history.back() for smart navigation -->
+            <button class="back-btn" onclick="history.back()">
                 <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 Back to Dashboard
             </button>
@@ -113,12 +101,10 @@
                     <label>Title / Unwan <span class="optional-tag">(Optional)</span></label>
                     <input type="text" id="postTitle" placeholder="Yahan title likhein...">
                 </div>
-                
                 <div class="form-group">
                     <label style="color:#10B981;">Image Link <span class="optional-tag">(Optional)</span></label>
                     <input type="text" id="postImage" placeholder="Tasveer ka link paste karein...">
                 </div>
-
                 <div class="form-group">
                     <label>Image Size</label>
                     <select id="postImageSize">
@@ -127,21 +113,17 @@
                         <option value="large">Bada (Full)</option>
                     </select>
                 </div>
-                
                 <div class="form-group">
-                    <label style="color:#F97316;">PDF Link <span class="optional-tag">(Optional - Drive link)</span></label>
+                    <label style="color:#F97316;">PDF Link <span class="optional-tag">(Optional)</span></label>
                     <input type="text" id="postPdf" placeholder="Google Drive PDF link yahan paste karein...">
                 </div>
-
                 <div class="form-group">
                     <label>Description / Tafseel <span class="optional-tag">(Optional)</span></label>
                     <textarea id="postContent" rows="4" placeholder="Tafseel likhein..."></textarea>
                 </div>
-                
                 <button class="btn" id="uploadBtn">Save to Website</button>
             </div>
 
-            <!-- History For Active Category -->
             <div class="post-list">
                 <div class="history-header">
                     <h2>Uploaded Items</h2>
@@ -153,14 +135,10 @@
 
     </div>
 
-    <!-- Success Popup -->
     <div class="popup-overlay" id="successPopup">
         <div class="popup-box" id="popupBox">
-            <div class="popup-icon">
-                <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-            </div>
+            <div class="popup-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
             <h2 style="color: #10B981; margin-bottom:10px;">Upload Successful!</h2>
-            <p style="font-size: 0.9rem; color:#64748b;">Aapka data website par mehfooz ho gaya hai.</p>
             <button class="popup-btn" onclick="document.getElementById('successPopup').style.display='none'">Awesome</button>
         </div>
     </div>
@@ -184,6 +162,9 @@
         
         let currentCategory = ""; 
 
+        // Initial setup for History API (Mobile Back button)
+        history.replaceState({view: 'dashboard'}, "", "#dashboard");
+
         window.openCategory = function(catId, catName) {
             currentCategory = catId;
             document.getElementById('activeCatTitle').innerText = catName;
@@ -196,13 +177,22 @@
             document.getElementById('postContent').value = '';
             
             loadHistory();
+            
+            // Push state so mobile back button returns to dashboard
+            history.pushState({view: 'editor'}, "", "#" + catId);
         };
 
-        window.closeCategory = function() {
-            currentCategory = "";
-            document.getElementById('editorView').classList.add('hidden');
-            document.getElementById('dashboardView').classList.remove('hidden');
-        };
+        // Listen for hardware back button or JS history.back()
+        window.addEventListener('popstate', (e) => {
+            if (e.state && e.state.view === 'editor') {
+                // Stay in editor
+            } else {
+                // Return to dashboard
+                currentCategory = "";
+                document.getElementById('editorView').classList.add('hidden');
+                document.getElementById('dashboardView').classList.remove('hidden');
+            }
+        });
 
         document.getElementById('uploadBtn').addEventListener('click', async () => {
             const title = document.getElementById('postTitle').value.trim();
@@ -212,8 +202,7 @@
             const pdfUrl = document.getElementById('postPdf').value.trim();
 
             if(!title && !content && !imageUrl && !pdfUrl) { 
-                alert("Koi ek cheez toh zaroor dalein! (Ya toh Title, ya Image, ya PDF)"); 
-                return; 
+                alert("Koi ek cheez toh zaroor dalein!"); return; 
             }
 
             const btn = document.getElementById('uploadBtn');
@@ -221,12 +210,8 @@
 
             try {
                 await addDoc(collection(db, "website_content"), {
-                    category: currentCategory, 
-                    title: title, 
-                    imageSize: imageSize, 
-                    content: content, 
-                    imageUrl: imageUrl, 
-                    pdfUrl: pdfUrl,
+                    category: currentCategory, title: title, imageSize: imageSize, 
+                    content: content, imageUrl: imageUrl, pdfUrl: pdfUrl,
                     timestamp: new Date().getTime()
                 });
                 
@@ -237,9 +222,7 @@
                 
                 document.getElementById('successPopup').style.display = 'flex';
                 loadHistory(); 
-            } catch (e) { 
-                alert("Error: " + e.message); 
-            }
+            } catch (e) { alert("Error: " + e.message); }
             
             btn.innerText = "Save to Website"; btn.disabled = false;
         });
@@ -248,33 +231,24 @@
             const container = document.getElementById('postsContainer');
             const totalCount = document.getElementById('totalCount');
             container.innerHTML = 'Load ho raha hai...';
-            
             try {
                 const q = query(collection(db, "website_content"), orderBy("timestamp", "desc"));
                 const querySnapshot = await getDocs(q);
-                container.innerHTML = ''; 
-                let count = 0;
+                container.innerHTML = ''; let count = 0;
                 
                 querySnapshot.forEach((documentSnapshot) => {
                     const data = documentSnapshot.data();
-                    
                     if(data.category === currentCategory) {
                         count++;
                         const itemDiv = document.createElement('div');
                         itemDiv.className = 'post-item';
-                        
                         let displayTitle = data.title ? data.title : (data.pdfUrl ? "PDF Document" : "Image / Media");
-                        
                         let infoHtml = "";
-                        if(data.imageUrl) infoHtml += `<span class="badge-tag">Image attached</span>`;
-                        if(data.pdfUrl) infoHtml += `<span class="badge-tag">PDF attached</span>`;
-                        if(data.content) infoHtml += `<span class="badge-tag">Text added</span>`;
+                        if(data.imageUrl) infoHtml += `<span class="badge-tag">Image</span>`;
+                        if(data.pdfUrl) infoHtml += `<span class="badge-tag">PDF</span>`;
+                        if(data.content) infoHtml += `<span class="badge-tag">Text</span>`;
                         
-                        itemDiv.innerHTML = `
-                            <h3>${displayTitle}</h3>
-                            <div class="post-info">${infoHtml}</div>
-                        `;
-                        
+                        itemDiv.innerHTML = `<h3>${displayTitle}</h3><div class="post-info">${infoHtml}</div>`;
                         const deleteBtn = document.createElement('button');
                         deleteBtn.className = 'btn-delete';
                         deleteBtn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Delete';
@@ -288,16 +262,12 @@
                         container.appendChild(itemDiv);
                     }
                 });
-                
-                if(count === 0) {
-                    container.innerHTML = '<p style="color:#94a3b8; font-style:italic;">Abhi tak is page par kuch upload nahi kiya gaya.</p>';
-                }
+                if(count === 0) container.innerHTML = '<p style="color:#94a3b8; font-style:italic;">Abhi tak is page par kuch upload nahi kiya gaya.</p>';
                 totalCount.innerText = `Total: ${count}`;
-            } catch (e) {
-                console.log(e);
-            }
+            } catch (e) { console.log(e); }
         }
     </script>
 </body>
-    </html>
+                </html>
+    
     
