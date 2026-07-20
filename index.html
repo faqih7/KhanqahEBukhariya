@@ -64,7 +64,7 @@
         .btn-read:hover { background: #059669; }
         .btn-download { background: var(--accent-color); color: white; }
         .btn-download:hover { background: #ea580c; }
-        .btn-style svg { width: 18px; height: 18px; stroke: white; }
+        .btn-style svg { width: 18px; height: 18px; stroke: white; fill: none; }
         
         .pdf-viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-color); z-index: 300; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s ease-in-out; }
         .pdf-viewer-overlay.active { transform: translateY(0); }
@@ -100,7 +100,6 @@
         <button class="icon-btn" id="menu-btn">
             <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
-        <!-- Title By Default Website Ka Naam Rahega -->
         <div class="site-title" id="page-title">Khanqah E Bukhariya</div>
         <button class="icon-btn" id="theme-toggle"></button>
     </header>
@@ -124,8 +123,8 @@
             </button>
         </div>
         <iframe id="pdf-iframe" src=""></iframe>
-                                                           </div>
-                <script>
+    </div>
+        <script>
         let currentPage = 'articles';
         let currentView = 'list';
         window.articlesData = []; 
@@ -138,7 +137,6 @@
             document.getElementById(target).classList.add('active');
             document.querySelector(`[data-target="${target}"]`).classList.add('active');
             
-            // Header title change logic: Agar home hai to website ka naam, warna category ka naam
             if (target === 'articles') {
                 document.getElementById('page-title').innerText = "Khanqah E Bukhariya";
             } else {
@@ -205,13 +203,28 @@
             let titleHtml = data.title ? `<h3 class="card-title">${data.title}</h3>` : '';
             let contentHtml = data.content ? `<div class="card-content">${data.content}</div>` : '';
             
-            // SVG Buttons for Read and Download
+            // Google Drive Link Automatic Parsing Logic
+            let pdfViewLink = '';
+            let pdfDownloadLink = '';
+            
+            if (data.pdfUrl) {
+                let fileIdMatch = data.pdfUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                if (fileIdMatch && fileIdMatch[1]) {
+                    let fileId = fileIdMatch[1];
+                    pdfViewLink = `https://drive.google.com/file/d/${fileId}/preview`;
+                    pdfDownloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                } else {
+                    pdfViewLink = data.pdfUrl;
+                    pdfDownloadLink = data.pdfUrl;
+                }
+            }
+
             let pdfHtml = data.pdfUrl ? `
                 <div class="btn-group">
-                    <button class="btn-style btn-read" onclick="window.openPDFViewer('${data.pdfUrl}')">
+                    <button class="btn-style btn-read" onclick="window.openPDFViewer('${pdfViewLink}')">
                         <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Read
                     </button>
-                    <a href="${data.pdfUrl}" target="_blank" download class="btn-style btn-download">
+                    <a href="${pdfDownloadLink}" class="btn-style btn-download">
                         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download
                     </a>
                 </div>
@@ -309,8 +322,8 @@
             if (body.classList.contains('dark-theme')) { localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = sunIcon; } 
             else { localStorage.setItem('theme', 'light'); themeBtn.innerHTML = moonIcon; }
         });
-                </script>
-                    <!-- Firebase Data Fetching -->
+        </script>
+            <!-- Firebase Data Fetching -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
@@ -353,13 +366,28 @@
                             let titleHtml = data.title ? `<h3 class="card-title">${data.title}</h3>` : '';
                             let contentHtml = data.content ? `<div class="card-content">${data.content}</div>` : '';
                             
-                            // Yahan bhi dusri category (Books waghaira) ke liye SVG button hain
+                            // Google Drive Link Automatic Parsing for other categories too
+                            let pdfViewLink = '';
+                            let pdfDownloadLink = '';
+                            
+                            if (data.pdfUrl) {
+                                let fileIdMatch = data.pdfUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                                if (fileIdMatch && fileIdMatch[1]) {
+                                    let fileId = fileIdMatch[1];
+                                    pdfViewLink = `https://drive.google.com/file/d/${fileId}/preview`;
+                                    pdfDownloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                                } else {
+                                    pdfViewLink = data.pdfUrl;
+                                    pdfDownloadLink = data.pdfUrl;
+                                }
+                            }
+
                             let pdfHtml = data.pdfUrl ? `
                                 <div class="btn-group">
-                                    <button class="btn-style btn-read" onclick="window.openPDFViewer('${data.pdfUrl}')">
+                                    <button class="btn-style btn-read" onclick="window.openPDFViewer('${pdfViewLink}')">
                                         <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Read
                                     </button>
-                                    <a href="${data.pdfUrl}" target="_blank" download class="btn-style btn-download">
+                                    <a href="${pdfDownloadLink}" class="btn-style btn-download">
                                         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download
                                     </a>
                                 </div>
