@@ -14,11 +14,11 @@
         a { text-decoration: none; }
         
         .header { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--card-bg); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
-        .site-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); text-align: center; flex: 1;}
+        .site-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-color); text-align: center; flex: 1;}
         
         .icon-btn { background: none; border: none; padding: 8px; cursor: pointer; border-radius: 12px; transition: background 0.2s;}
         .icon-btn:hover { background: rgba(16, 185, 129, 0.1); }
-        .icon-btn svg { width: 26px; height: 26px; stroke: var(--text-color); fill: none; transition: stroke 0.3s; }
+        .icon-btn svg { width: 24px; height: 24px; stroke: var(--text-color); fill: none; transition: stroke 0.3s; }
         
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.5); z-index: 150; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(2px);}
         .sidebar { position: fixed; top: 0; left: -320px; width: 280px; height: 100vh; background: var(--card-bg); z-index: 200; transition: transform 0.3s ease-out; padding: 1rem; box-shadow: 2px 0 15px rgba(0,0,0,0.1);}
@@ -26,48 +26,50 @@
         .sidebar-active .overlay { opacity: 1; visibility: visible; }
         
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 1rem; margin-bottom: 1rem;}
-        .sidebar-title { font-weight: 700; color: var(--primary-color); font-size: 1.2rem; margin-left: 10px;}
+        .sidebar-title { font-weight: 700; color: var(--primary-color); font-size: 1.1rem; margin-left: 10px;}
         
         .nav-links { list-style: none; }
-        .nav-links a { display: block; padding: 1rem; font-weight: 500; cursor: pointer; color: var(--text-color); margin-bottom: 5px; border-radius: 12px; transition: 0.2s;}
+        .nav-links a { display: block; padding: 0.85rem 1rem; font-size: 0.95rem; font-weight: 500; cursor: pointer; color: var(--text-color); margin-bottom: 5px; border-radius: 12px; transition: 0.2s;}
         .nav-links a:hover, .nav-links a.active { background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
         
         .page-section { display: none; padding: 1.5rem 1rem; max-width: 800px; margin: 0 auto;}
         .page-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .grid-container { display: grid; gap: 1.5rem; }
-        .glass-card { background: var(--card-bg); padding: 1.5rem; border-radius: 24px; box-shadow: var(--shadow); transition: transform 0.2s;}
+        .grid-container { display: grid; gap: 1.2rem; }
+        .glass-card { background: var(--card-bg); padding: 1.2rem; border-radius: 20px; box-shadow: var(--shadow); transition: transform 0.2s;}
         
-        .img-small { width: 100%; height: 180px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
-        .img-medium { width: 100%; height: 300px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
-        .img-large { width: 100%; height: auto; max-height:500px; object-fit: contain; border-radius: 16px; margin-bottom: 1rem; background: #000; }
+        .img-small { width: 100%; height: 160px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
+        .img-medium { width: 100%; height: 250px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
+        .img-large { width: 100%; height: auto; max-height:450px; object-fit: contain; border-radius: 16px; margin-bottom: 1rem; background: #000; }
         
-        .card-title { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
-        .card-content { line-height: 1.8; white-space: pre-wrap; margin-bottom: 1rem; }
+        .card-title { color: var(--primary-color); font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .card-content { font-size: 0.95rem; line-height: 1.7; white-space: pre-wrap; margin-bottom: 1rem; }
         
         .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .gallery-item img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow);}
-        .empty-text { text-align: center; padding: 2rem; color: #94a3b8; font-style: italic; }
+        .gallery-item img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow);}
+        .empty-text { text-align: center; padding: 2rem; color: #94a3b8; font-style: italic; font-size: 0.95rem; }
 
         .article-list-item { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
         .article-list-item:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--primary-color); }
-        .read-more-text { color: var(--primary-color); font-size: 0.95rem; font-weight: 600; margin-top: 10px; display: inline-block; }
+        .read-more-text { color: var(--primary-color); font-size: 0.85rem; font-weight: 600; margin-top: 10px; display: inline-block; }
         
-        .more-articles-heading { margin-bottom: 1rem; color: var(--primary-color); font-size: 1.2rem; font-weight: 700; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 0.5rem;}
-        .more-article-item { display: block; padding: 1rem; background: rgba(16,185,129,0.05); border-radius: 12px; margin-bottom: 0.8rem; cursor: pointer; font-weight: 600; color: var(--text-color); transition: 0.2s; border: 1px solid transparent; }
+        .more-articles-heading { margin-bottom: 0.8rem; color: var(--primary-color); font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 0.5rem;}
+        .more-article-item { display: block; padding: 0.8rem; font-size: 0.95rem; background: rgba(16,185,129,0.05); border-radius: 12px; margin-bottom: 0.8rem; cursor: pointer; font-weight: 600; color: var(--text-color); transition: 0.2s; border: 1px solid transparent; }
         .more-article-item:hover { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: var(--primary-color); }
 
         .btn-group { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-        .btn-read { background: var(--primary-color); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; flex: 1; text-align: center; transition: 0.2s; }
+        .btn-style { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 14px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; flex: 1; transition: 0.2s; text-decoration: none;}
+        .btn-read { background: var(--primary-color); color: white; }
         .btn-read:hover { background: #059669; }
-        .btn-download { background: var(--accent-color); color: white; padding: 10px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; flex: 1; text-align: center; display: inline-block; text-decoration: none; transition: 0.2s; }
+        .btn-download { background: var(--accent-color); color: white; }
         .btn-download:hover { background: #ea580c; }
+        .btn-style svg { width: 18px; height: 18px; stroke: white; }
         
         .pdf-viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-color); z-index: 300; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s ease-in-out; }
         .pdf-viewer-overlay.active { transform: translateY(0); }
         .pdf-viewer-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--primary-color); color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .pdf-viewer-title { font-weight: 700; font-size: 1.2rem; }
+        .pdf-viewer-title { font-weight: 700; font-size: 1.1rem; }
         .pdf-viewer-header .icon-btn svg { stroke: white; }
         #pdf-iframe { flex: 1; width: 100%; border: none; background: #fff; }
     </style>
@@ -98,7 +100,8 @@
         <button class="icon-btn" id="menu-btn">
             <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
-        <div class="site-title" id="page-title">Home</div>
+        <!-- Title By Default Website Ka Naam Rahega -->
+        <div class="site-title" id="page-title">Khanqah E Bukhariya</div>
         <button class="icon-btn" id="theme-toggle"></button>
     </header>
 
@@ -111,7 +114,8 @@
         <div id="books" class="page-section"><div id="content-books" class="grid-container"></div></div>
         <div id="gallery" class="page-section"><div id="content-gallery" class="gallery-grid"></div></div>
     </main>
-        <!-- Full Screen PDF Viewer -->
+
+    <!-- Full Screen PDF Viewer -->
     <div id="pdf-viewer-overlay" class="pdf-viewer-overlay">
         <div class="pdf-viewer-header">
             <span class="pdf-viewer-title">PDF Reader</span>
@@ -120,9 +124,8 @@
             </button>
         </div>
         <iframe id="pdf-iframe" src=""></iframe>
-    </div>
-
-    <script>
+                                                           </div>
+                <script>
         let currentPage = 'articles';
         let currentView = 'list';
         window.articlesData = []; 
@@ -134,7 +137,13 @@
             document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
             document.getElementById(target).classList.add('active');
             document.querySelector(`[data-target="${target}"]`).classList.add('active');
-            document.getElementById('page-title').innerText = title;
+            
+            // Header title change logic: Agar home hai to website ka naam, warna category ka naam
+            if (target === 'articles') {
+                document.getElementById('page-title').innerText = "Khanqah E Bukhariya";
+            } else {
+                document.getElementById('page-title').innerText = title;
+            }
             window.scrollTo(0,0);
         }
 
@@ -196,10 +205,15 @@
             let titleHtml = data.title ? `<h3 class="card-title">${data.title}</h3>` : '';
             let contentHtml = data.content ? `<div class="card-content">${data.content}</div>` : '';
             
+            // SVG Buttons for Read and Download
             let pdfHtml = data.pdfUrl ? `
                 <div class="btn-group">
-                    <button class="btn-read" onclick="window.openPDFViewer('${data.pdfUrl}')">📖 Read</button>
-                    <a href="${data.pdfUrl}" target="_blank" download class="btn-download">⬇️ Download</a>
+                    <button class="btn-style btn-read" onclick="window.openPDFViewer('${data.pdfUrl}')">
+                        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Read
+                    </button>
+                    <a href="${data.pdfUrl}" target="_blank" download class="btn-style btn-download">
+                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download
+                    </a>
                 </div>
             ` : '';
             
@@ -224,7 +238,6 @@
 
             container.innerHTML = detailHtml;
             window.scrollTo(0,0);
-            
             currentView = 'detail';
             
             if (pushHistory) {
@@ -268,7 +281,7 @@
                 
                 if (currentPage === 'articles' && currentView === 'detail') {
                     window.openArticleDetail(e.state.articleIndex, false);
-                    switchPageUI('articles', 'Home');
+                    switchPageUI('articles', 'Khanqah E Bukhariya');
                 } else {
                     if (currentPage === 'articles') {
                         window.renderArticlesList();
@@ -279,7 +292,7 @@
                 currentPage = 'articles';
                 currentView = 'list';
                 if(window.articlesData.length > 0) window.renderArticlesList();
-                switchPageUI('articles', 'Home');
+                switchPageUI('articles', 'Khanqah E Bukhariya');
             }
         });
 
@@ -296,8 +309,8 @@
             if (body.classList.contains('dark-theme')) { localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = sunIcon; } 
             else { localStorage.setItem('theme', 'light'); themeBtn.innerHTML = moonIcon; }
         });
-    </script>
-        <!-- Firebase Data Fetching -->
+                </script>
+                    <!-- Firebase Data Fetching -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
@@ -340,10 +353,15 @@
                             let titleHtml = data.title ? `<h3 class="card-title">${data.title}</h3>` : '';
                             let contentHtml = data.content ? `<div class="card-content">${data.content}</div>` : '';
                             
+                            // Yahan bhi dusri category (Books waghaira) ke liye SVG button hain
                             let pdfHtml = data.pdfUrl ? `
                                 <div class="btn-group">
-                                    <button class="btn-read" onclick="window.openPDFViewer('${data.pdfUrl}')">📖 Read</button>
-                                    <a href="${data.pdfUrl}" target="_blank" download class="btn-download">⬇️ Download</a>
+                                    <button class="btn-style btn-read" onclick="window.openPDFViewer('${data.pdfUrl}')">
+                                        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Read
+                                    </button>
+                                    <a href="${data.pdfUrl}" target="_blank" download class="btn-style btn-download">
+                                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download
+                                    </a>
                                 </div>
                             ` : '';
                             
