@@ -1,273 +1,361 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Khanqah E Bukhariya</title>
+    <title>Advanced Master Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --bg-dark: #0f172a; --bg-panel: #1e293b; --text-main: #f8fafc; --text-muted: #94a3b8;
+            --accent: #3b82f6; --accent-hover: #2563eb; --danger: #ef4444; --success: #10b981;
+            --border: #334155; --transition: all 0.3s ease;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #F8FAFC; color: #0F172A; padding: 1.5rem; padding-bottom: 5rem; }
-        .admin-container { max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h1 { color: #10B981; margin-bottom: 0.5rem; text-align: center; font-size: 1.8rem; }
-        .subtitle { text-align: center; color: #64748b; margin-bottom: 2rem; font-size: 0.9rem; }
+        body { background: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+
+        .sidebar { width: 280px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: var(--transition); z-index: 100; }
+        .sidebar.closed { transform: translateX(-100%); position: absolute; height: 100%; }
         
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 2rem; }
-        .cat-card { background: #f1f5f9; border: 2px solid transparent; padding: 1.5rem 1rem; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
-        .cat-card:hover { border-color: #10B981; background: #ecfdf5; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(16,185,129,0.1); }
-        .cat-icon svg { width: 32px; height: 32px; stroke: #10B981; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: 0.3s; }
-        .cat-card:hover .cat-icon svg { transform: scale(1.1); }
-        .cat-name { font-weight: 600; font-size: 0.95rem; color: #334155; }
-        .hidden { display: none !important; }
+        .brand { padding: 20px; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); color: var(--accent); }
+        .brand svg { width: 24px; height: 24px; }
         
-        .back-btn { display: inline-flex; align-items: center; gap: 8px; background: #e2e8f0; border: none; padding: 8px 15px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-bottom: 1.5rem; color: #334155; transition: background 0.3s; }
-        .back-btn svg { width: 18px; height: 18px; stroke: #334155; stroke-width: 2; fill: none; }
-        .back-btn:hover { background: #cbd5e1; }
+        .nav-menu { padding: 20px 10px; display: flex; flex-direction: column; gap: 10px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; cursor: pointer; color: var(--text-muted); font-weight: 500; transition: var(--transition); }
+        .nav-item:hover, .nav-item.active { background: rgba(59, 130, 246, 0.1); color: var(--accent); }
+        .nav-item svg { width: 20px; height: 20px; stroke-width: 2; }
+
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
+        .top-header { height: 70px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; position: sticky; top: 0; z-index: 50; }
+        .menu-btn { background: none; border: none; color: var(--text-main); cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: var(--transition); }
+        .menu-btn:hover { background: var(--border); }
+        .menu-btn svg { width: 24px; height: 24px; }
+
+        .workspace-area { padding: 30px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .panel { display: none; animation: fadeIn 0.4s ease; }
+        .panel.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title { font-size: 1.5rem; margin-bottom: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 20px; }
+        label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 500; }
+        input, select, textarea { background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); padding: 12px 15px; border-radius: 10px; outline: none; transition: var(--transition); }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
         
-        .form-group { margin-bottom: 1.2rem; }
-        label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #334155; }
-        .optional-tag { font-size: 0.8rem; font-weight: normal; color: #94a3b8; }
-        input, select, textarea { width: 100%; padding: 0.8rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s;}
-        input:focus, select:focus, textarea:focus { border-color: #10B981; box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
-        .btn { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; padding: 1rem 2rem; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 1.1rem; width: 100%; margin-top: 1rem; transition: 0.3s;}
+        .preview-box { display: flex; align-items: center; justify-content: center; padding: 40px; background: var(--bg-dark); border: 1px dashed var(--border); border-radius: 12px; margin-bottom: 20px; min-height: 150px; }
+        #live-shape { transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; font-weight: 600; padding: 15px 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); cursor: pointer; }
+
+        .btn { padding: 12px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 8px; color: white; }
+        .btn-primary { background: var(--accent); } .btn-primary:hover { background: var(--accent-hover); }
+        .btn-success { background: var(--success); }
+        .btn-danger { background: var(--danger); padding: 8px 12px; font-size: 0.8rem; }
+        .btn-edit { background: #f59e0b; padding: 8px 12px; font-size: 0.8rem; }
+
+        .list-item { background: var(--bg-dark); padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid var(--border); }
+        .list-actions { display: flex; gap: 10px; }
         
-        .post-list { margin-top: 3rem; border-top: 2px solid #e2e8f0; padding-top: 2rem; }
-        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .post-item { background: #f8fafc; padding: 1.2rem; border-radius: 16px; margin-bottom: 1rem; border-left: 5px solid #10B981; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .post-item h3 { font-size: 1.1rem; color: #0F172A; margin-bottom: 0.5rem; }
-        .post-info { font-size: 0.85rem; color: #64748b; margin-bottom: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .badge-tag { background: #e2e8f0; padding: 3px 8px; border-radius: 8px; font-weight: 500;}
-        .btn-delete { background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px; transition: 0.2s;}
-        .btn-delete svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; }
-        
-        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .popup-box { background: white; padding: 2.5rem 2rem; border-radius: 24px; text-align: center; width: 90%; max-width: 350px; }
-        .popup-icon svg { width: 64px; height: 64px; stroke: #10B981; fill: none; stroke-width: 2; margin-bottom: 15px; }
-        .popup-btn { background: #10B981; color: white; border: none; padding: 0.8rem 2rem; border-radius: 12px; margin-top: 1.5rem; cursor: pointer; font-weight:600; width: 100%; }
+        .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap: 15px; margin-top: 15px; }
+        .uploaded-icon { width: 60px; height: 60px; object-fit: contain; background: var(--bg-dark); padding: 10px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; }
     </style>
 </head>
 <body>
+        <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+            App Builder
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item active" onclick="switchMenu('panel-customize', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                App Customize
+            </div>
+            <div class="nav-item" onclick="switchMenu('panel-content', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Add Content
+            </div>
+            <div class="nav-item" onclick="switchMenu('panel-icons', this)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Custom Icons
+            </div>
+        </div>
+    </aside>
 
-    <div class="admin-container">
-        
-        <!-- DASHBOARD VIEW -->
-        <div id="dashboardView">
-            <h1>Khanqah E Bukhariya</h1>
-            <p class="subtitle">Admin Dashboard - Category select karein</p>
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="top-header">
+            <button class="menu-btn" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        </header>
+
+        <div class="workspace-area">
             
-            <div class="dashboard-grid">
-                <div class="cat-card" onclick="openCategory('articles', 'Home')">
-                    <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div>
-                    <div class="cat-name">Home</div>
+            <!-- PANEL 1: APP CUSTOMIZE (Shape Builder) -->
+            <section id="panel-customize" class="panel active">
+                <h2 class="section-title">App Customize & Shape Builder</h2>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">App General Settings</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label>App Background</label><input type="text" id="cfg-bg" value="#FDF8ED"></div>
+                        <div class="form-group"><label>Nav Color</label><input type="color" id="cfg-nav" value="#FFC107" style="height: 45px; padding: 0;"></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Primary Font</label>
+                            <select id="cfg-primary-font"><option value="'Poppins', sans-serif">Poppins</option><option value="'Nunito', sans-serif">Nunito</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Arabic Font</label>
+                            <select id="cfg-arabic-font"><option value="'Amiri Quran', serif">Amiri Quran</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label>Greeting Text</label><input type="text" id="cfg-greeting" value="Assalamu Alaikum"></div>
+                    <button class="btn btn-primary" style="width: 100%;" onclick="saveDesign()">Save Design Settings to Cloud</button>
                 </div>
-                <div class="cat-card" onclick="openCategory('books', 'Books & Kutub')">
-                    <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
-                    <div class="cat-name">Books / Kutub</div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Live Shape / Button Builder</h3>
+                    <div class="preview-box"><div id="live-shape">Button Preview</div></div>
+
+                    <div class="form-grid">
+                        <div class="form-group"><label>Element Name</label><input type="text" id="shape-name" placeholder="e.g. Next Button" oninput="updateShapePreview()"></div>
+                        <div class="form-group">
+                            <label>Border Radius</label>
+                            <input type="range" id="shape-radius" min="0" max="50" value="10" oninput="updateShapePreview()"><small id="radius-val">10px</small>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Background Color</label><input type="color" id="shape-bg" value="#3b82f6" oninput="updateShapePreview()" style="height: 45px; padding: 0;"></div>
+                        <div class="form-group"><label>Text Color</label><input type="color" id="shape-text" value="#ffffff" oninput="updateShapePreview()" style="height: 45px; padding: 0;"></div>
+                    </div>
+                    <button class="btn btn-success" style="width: 100%;" onclick="saveShape()">Save Custom Button Shape</button>
                 </div>
-                <div class="cat-card" onclick="openCategory('gallery', 'Gallery')">
-                    <div class="cat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
-                    <div class="cat-name">Gallery</div>
+
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Saved Shapes</h3>
+                    <div id="shapes-list"></div>
                 </div>
-                <div class="cat-card" onclick="openCategory('sawaneh', 'Sawaneh Hayat')">
-                    <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                    <div class="cat-name">Sawaneh Hayat</div>
+            </section>
+
+            <!-- PANEL 2: ADD CONTENT -->
+            <section id="panel-content" class="panel">
+                <h2 class="section-title">Add Content (Line by Line)</h2>
+                <div class="card">
+                    <div class="form-group"><label>Category / Surah Name</label><input type="text" id="cont-cat" placeholder="e.g. Surah Ikhlas"></div>
+                    <div class="form-group"><label>Arabic Text</label><textarea id="cont-arabic" rows="3" dir="rtl" placeholder="عربی لکھیں..."></textarea></div>
+                    <div class="form-group"><label>Text Color</label><input type="color" id="cont-color" value="#111111" style="height: 45px; padding: 0;"></div>
+                    <div class="form-group"><label>Translation / Subtext</label><textarea id="cont-trans" rows="2" placeholder="Urdu/Roman Translation..."></textarea></div>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Attach Audio File</label><input type="file" accept="audio/*"></div>
+                        <div class="form-group"><label>Attach Inline Image (Optional)</label><input type="file" id="cont-img" accept="image/*"></div>
+                    </div>
+                    <button class="btn btn-success" style="width: 100%;" onclick="saveContent()">Publish Content to App</button>
                 </div>
-                <div class="cat-card" onclick="openCategory('shajra-nasab', 'Shajra-e-Nasab')">
-                    <div class="cat-icon"><svg viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1"></rect><rect x="2" y="16" width="6" height="6" rx="1"></rect><rect x="9" y="2" width="6" height="6" rx="1"></rect><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"></path><path d="M12 12V8"></path></svg></div>
-                    <div class="cat-name">Shajra-e-Nasab</div>
+            </section>
+
+            <!-- PANEL 3: CUSTOM ICONS UPLOAD -->
+            <section id="panel-icons" class="panel">
+                <h2 class="section-title">Custom Icons Manager</h2>
+                <div class="card">
+                    <div class="form-group"><label>Upload Custom Icon (SVG / PNG / JPG)</label><input type="file" id="custom-icon-upload" accept=".svg, image/png, image/jpeg" onchange="uploadIcon(event)"></div>
+                    <h4 style="margin-top: 20px;">Uploaded Icons Library</h4>
+                    <div class="icon-grid" id="icon-library"></div>
                 </div>
-                <div class="cat-card" onclick="openCategory('shajra-tariqat', 'Shajra-e-Tariqat')">
-                    <div class="cat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></div>
-                    <div class="cat-name">Shajra-e-Tariqat</div>
-                </div>
-                <div class="cat-card" onclick="openCategory('khanqah', 'Khanqah')">
-                    <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></div>
-                    <div class="cat-name">Khanqah</div>
-                </div>
-            </div>
+            </section>
         </div>
-
-        <!-- EDITOR VIEW -->
-        <div id="editorView" class="hidden">
-            <!-- UI Button calling history.back() for smart navigation -->
-            <button class="back-btn" onclick="history.back()">
-                <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                Back to Dashboard
-            </button>
-            <h1 id="activeCatTitle" style="text-align: left; margin-bottom: 1.5rem;">Category Title</h1>
-            
-            <div id="adminForm">
-                <div class="form-group">
-                    <label>Title / Unwan <span class="optional-tag">(Optional)</span></label>
-                    <input type="text" id="postTitle" placeholder="Yahan title likhein...">
-                </div>
-                <div class="form-group">
-                    <label style="color:#10B981;">Image Link <span class="optional-tag">(Optional)</span></label>
-                    <input type="text" id="postImage" placeholder="Tasveer ka link paste karein...">
-                </div>
-                <div class="form-group">
-                    <label>Image Size</label>
-                    <select id="postImageSize">
-                        <option value="medium">Darmiyana (Medium)</option>
-                        <option value="small">Chota (Small)</option>
-                        <option value="large">Bada (Full)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label style="color:#F97316;">PDF Link <span class="optional-tag">(Optional)</span></label>
-                    <input type="text" id="postPdf" placeholder="Google Drive PDF link yahan paste karein...">
-                </div>
-                <div class="form-group">
-                    <label>Description / Tafseel <span class="optional-tag">(Optional)</span></label>
-                    <textarea id="postContent" rows="4" placeholder="Tafseel likhein..."></textarea>
-                </div>
-                <button class="btn" id="uploadBtn">Save to Website</button>
-            </div>
-
-            <div class="post-list">
-                <div class="history-header">
-                    <h2>Uploaded Items</h2>
-                    <span id="totalCount" style="background:#10B981; color:white; padding:4px 10px; border-radius:12px; font-size:0.8rem; font-weight:bold;">Total: 0</span>
-                </div>
-                <div id="postsContainer">Data load ho raha hai...</div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="popup-overlay" id="successPopup">
-        <div class="popup-box" id="popupBox">
-            <div class="popup-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
-            <h2 style="color: #10B981; margin-bottom:10px;">Upload Successful!</h2>
-            <button class="popup-btn" onclick="document.getElementById('successPopup').style.display='none'">Awesome</button>
-        </div>
-    </div>
-
+        <!-- Firebase Cloud Storage Sync Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyChM3EQOo2UNmwFnHwLc3ooq63eEm5uuh8",
-            authDomain: "khanqahebukhariya.firebaseapp.com",
-            projectId: "khanqahebukhariya",
-            storageBucket: "khanqahebukhariya.firebasestorage.app",
-            messagingSenderId: "459052789180",
-            appId: "1:459052789180:web:67ef47ee77da16275a4fb9",
-            measurementId: "G-KVBGJEWEXP"
+            apiKey: "AIzaSyARipbpqrtoB5dsH05xGyqc8mM30sCoPQc",
+            authDomain: "kids-islamic-31aff.firebaseapp.com",
+            projectId: "kids-islamic-31aff",
+            storageBucket: "kids-islamic-31aff.firebasestorage.app",
+            messagingSenderId: "131783238650",
+            appId: "1:131783238650:web:e7fe13d44cb6dc1410ba43",
+            measurementId: "G-N7E3JJJM4Z"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        let savedShapes = [];
+        let uploadedIcons = [];
+        let editingShapeId = null;
+
+        async function loadInitialData() {
+            const shapesSnap = await getDoc(doc(db, "appDatabase", "shapes"));
+            if (shapesSnap.exists()) { savedShapes = shapesSnap.data().items || []; renderShapes(); }
+            
+            const iconsSnap = await getDoc(doc(db, "appDatabase", "icons"));
+            if (iconsSnap.exists()) { uploadedIcons = iconsSnap.data().items || []; renderIcons(); }
+            
+            const settingsSnap = await getDoc(doc(db, "appDatabase", "settings"));
+            if(settingsSnap.exists()) {
+                const sets = settingsSnap.data();
+                document.getElementById('cfg-bg').value = sets.appBg || "#FDF8ED";
+                document.getElementById('cfg-nav').value = sets.navBg || "#FFC107";
+                document.getElementById('cfg-primary-font').value = sets.primaryFont || "'Poppins', sans-serif";
+                document.getElementById('cfg-arabic-font').value = sets.arabicFont || "'Amiri Quran', serif";
+                document.getElementById('cfg-greeting').value = sets.greetingText || "Assalamu Alaikum";
+            }
+            window.updateShapePreview();
+        }
         
-        let currentCategory = ""; 
+        loadInitialData();
 
-        // Initial setup for History API (Mobile Back button)
-        history.replaceState({view: 'dashboard'}, "", "#dashboard");
+        window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('closed'); }
+        window.switchMenu = function(panelId, btnElement) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            document.getElementById(panelId).classList.add('active');
+            btnElement.classList.add('active');
+            if(window.innerWidth < 768) window.toggleSidebar();
+        }
 
-        window.openCategory = function(catId, catName) {
-            currentCategory = catId;
-            document.getElementById('activeCatTitle').innerText = catName;
-            document.getElementById('dashboardView').classList.add('hidden');
-            document.getElementById('editorView').classList.remove('hidden');
-            
-            document.getElementById('postTitle').value = '';
-            document.getElementById('postImage').value = '';
-            document.getElementById('postPdf').value = '';
-            document.getElementById('postContent').value = '';
-            
-            loadHistory();
-            
-            // Push state so mobile back button returns to dashboard
-            history.pushState({view: 'editor'}, "", "#" + catId);
-        };
+        window.saveDesign = async function() {
+            const settings = {
+                appBg: document.getElementById('cfg-bg').value,
+                navBg: document.getElementById('cfg-nav').value,
+                primaryFont: document.getElementById('cfg-primary-font').value,
+                arabicFont: document.getElementById('cfg-arabic-font').value,
+                greetingText: document.getElementById('cfg-greeting').value
+            };
+            await setDoc(doc(db, "appDatabase", "settings"), settings);
+            alert("Design synced to User App instantly!");
+        }
 
-        // Listen for hardware back button or JS history.back()
-        window.addEventListener('popstate', (e) => {
-            if (e.state && e.state.view === 'editor') {
-                // Stay in editor
-            } else {
-                // Return to dashboard
-                currentCategory = "";
-                document.getElementById('editorView').classList.add('hidden');
-                document.getElementById('dashboardView').classList.remove('hidden');
+        window.updateShapePreview = function() {
+            const name = document.getElementById('shape-name').value || "Preview Text";
+            const radius = document.getElementById('shape-radius').value;
+            const bg = document.getElementById('shape-bg').value;
+            const textCol = document.getElementById('shape-text').value;
+
+            document.getElementById('radius-val').innerText = radius + 'px';
+            const preview = document.getElementById('live-shape');
+            preview.innerText = name; preview.style.borderRadius = `${radius}px`;
+            preview.style.backgroundColor = bg; preview.style.color = textCol;
+        }
+
+        window.saveShape = async function() {
+            const name = document.getElementById('shape-name').value;
+            if(!name) return alert("Please enter a name!");
+            const shapeData = {
+                id: editingShapeId ? editingShapeId : Date.now().toString(),
+                name: name, radius: document.getElementById('shape-radius').value,
+                bg: document.getElementById('shape-bg').value, textColor: document.getElementById('shape-text').value
+            };
+
+            if(editingShapeId) {
+                const index = savedShapes.findIndex(s => s.id === editingShapeId);
+                savedShapes[index] = shapeData; editingShapeId = null;
+            } else { savedShapes.push(shapeData); }
+
+            await setDoc(doc(db, "appDatabase", "shapes"), { items: savedShapes });
+            renderShapes(); document.getElementById('shape-name').value = ''; window.updateShapePreview();
+            alert("Shape Saved to Firebase!");
+        }
+
+        function renderShapes() {
+            const list = document.getElementById('shapes-list');
+            list.innerHTML = '';
+            if(savedShapes.length === 0) return list.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">No shapes created yet.</p>';
+
+            savedShapes.forEach(shape => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <div style="width: 50px; height: 30px; background: ${shape.bg}; border-radius: ${shape.radius}px; border: 1px solid var(--border);"></div>
+                        <div><div style="font-weight:600; font-size:0.9rem;">${shape.name}</div><div style="font-size:0.7rem; color:var(--text-muted);">Radius: ${shape.radius}px</div></div>
+                    </div>
+                    <div class="list-actions">
+                        <button class="btn btn-edit" onclick="editShape('${shape.id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteShape('${shape.id}')">Delete</button>
+                    </div>`;
+                list.appendChild(item);
+            });
+        }
+
+        window.editShape = function(id) {
+            const shape = savedShapes.find(s => s.id === id);
+            if(!shape) return;
+            document.getElementById('shape-name').value = shape.name; document.getElementById('shape-radius').value = shape.radius;
+            document.getElementById('shape-bg').value = shape.bg; document.getElementById('shape-text').value = shape.textColor;
+            editingShapeId = id; window.updateShapePreview(); window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.deleteShape = async function(id) {
+            if(confirm("Delete this shape?")) {
+                savedShapes = savedShapes.filter(s => s.id !== id);
+                await setDoc(doc(db, "appDatabase", "shapes"), { items: savedShapes }); renderShapes();
             }
-        });
+        }
 
-        document.getElementById('uploadBtn').addEventListener('click', async () => {
-            const title = document.getElementById('postTitle').value.trim();
-            const imageSize = document.getElementById('postImageSize').value;
-            const content = document.getElementById('postContent').value.trim();
-            const imageUrl = document.getElementById('postImage').value.trim();
-            const pdfUrl = document.getElementById('postPdf').value.trim();
-
-            if(!title && !content && !imageUrl && !pdfUrl) { 
-                alert("Koi ek cheez toh zaroor dalein!"); return; 
+        window.saveContent = async function() {
+            const catName = document.getElementById('cont-cat').value;
+            if(!catName) return alert("Please enter Category Name");
+            
+            const docSnap = await getDoc(doc(db, "appDatabase", "categories"));
+            let categories = docSnap.exists() ? (docSnap.data().items || []) : [];
+            let catIndex = categories.findIndex(c => c.title === catName);
+            
+            if(catIndex === -1) {
+                categories.push({ id: Date.now().toString(), title: catName, iconColor: '#ffffff', items: [] });
+                catIndex = categories.length - 1;
             }
 
-            const btn = document.getElementById('uploadBtn');
-            btn.innerText = "Saving..."; btn.disabled = true;
+            // Using placeholder logic for image file upload. In production, upload to Firebase Storage first.
+            let imgSrc = document.getElementById('cont-img').files.length > 0 ? 'https://via.placeholder.com/400x150' : null;
 
-            try {
-                await addDoc(collection(db, "website_content"), {
-                    category: currentCategory, title: title, imageSize: imageSize, 
-                    content: content, imageUrl: imageUrl, pdfUrl: pdfUrl,
-                    timestamp: new Date().getTime()
-                });
-                
-                document.getElementById('postTitle').value = '';
-                document.getElementById('postContent').value = '';
-                document.getElementById('postImage').value = '';
-                document.getElementById('postPdf').value = '';
-                
-                document.getElementById('successPopup').style.display = 'flex';
-                loadHistory(); 
-            } catch (e) { alert("Error: " + e.message); }
+            categories[catIndex].items.push({
+                arabic: document.getElementById('cont-arabic').value,
+                textColor: document.getElementById('cont-color').value,
+                translation: document.getElementById('cont-trans').value,
+                optImage: imgSrc
+            });
+
+            await setDoc(doc(db, "appDatabase", "categories"), { items: categories });
+            document.getElementById('cont-arabic').value = ''; document.getElementById('cont-trans').value = '';
+            alert("Content securely published via Firebase!");
+        }
+
+        window.uploadIcon = function(event) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                uploadedIcons.push(e.target.result);
+                await setDoc(doc(db, "appDatabase", "icons"), { items: uploadedIcons });
+                renderIcons(); document.getElementById('custom-icon-upload').value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderIcons() {
+            const grid = document.getElementById('icon-library');
+            if(uploadedIcons.length === 0) return grid.innerHTML = '<div style="color: var(--text-muted); font-size: 0.8rem; grid-column: span 3;">No icons uploaded.</div>';
             
-            btn.innerText = "Save to Website"; btn.disabled = false;
-        });
-
-        async function loadHistory() {
-            const container = document.getElementById('postsContainer');
-            const totalCount = document.getElementById('totalCount');
-            container.innerHTML = 'Load ho raha hai...';
-            try {
-                const q = query(collection(db, "website_content"), orderBy("timestamp", "desc"));
-                const querySnapshot = await getDocs(q);
-                container.innerHTML = ''; let count = 0;
-                
-                querySnapshot.forEach((documentSnapshot) => {
-                    const data = documentSnapshot.data();
-                    if(data.category === currentCategory) {
-                        count++;
-                        const itemDiv = document.createElement('div');
-                        itemDiv.className = 'post-item';
-                        let displayTitle = data.title ? data.title : (data.pdfUrl ? "PDF Document" : "Image / Media");
-                        let infoHtml = "";
-                        if(data.imageUrl) infoHtml += `<span class="badge-tag">Image</span>`;
-                        if(data.pdfUrl) infoHtml += `<span class="badge-tag">PDF</span>`;
-                        if(data.content) infoHtml += `<span class="badge-tag">Text</span>`;
-                        
-                        itemDiv.innerHTML = `<h3>${displayTitle}</h3><div class="post-info">${infoHtml}</div>`;
-                        const deleteBtn = document.createElement('button');
-                        deleteBtn.className = 'btn-delete';
-                        deleteBtn.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Delete';
-                        deleteBtn.addEventListener('click', async () => {
-                            if(confirm("Waqa'i delete karna chahte hain?")) {
-                                await deleteDoc(doc(db, "website_content", documentSnapshot.id));
-                                loadHistory();
-                            }
-                        });
-                        itemDiv.appendChild(deleteBtn);
-                        container.appendChild(itemDiv);
+            grid.innerHTML = '';
+            uploadedIcons.forEach((iconSrc, index) => {
+                const img = document.createElement('img'); img.src = iconSrc; img.className = 'uploaded-icon';
+                img.onclick = async () => {
+                    if(confirm("Delete this icon?")) {
+                        uploadedIcons.splice(index, 1);
+                        await setDoc(doc(db, "appDatabase", "icons"), { items: uploadedIcons }); renderIcons();
                     }
-                });
-                if(count === 0) container.innerHTML = '<p style="color:#94a3b8; font-style:italic;">Abhi tak is page par kuch upload nahi kiya gaya.</p>';
-                totalCount.innerText = `Total: ${count}`;
-            } catch (e) { console.log(e); }
+                };
+                grid.appendChild(img);
+            });
         }
     </script>
 </body>
-                </html>
-    
-    
+</html>
+</main>
+                                                 
