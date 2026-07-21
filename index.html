@@ -1,424 +1,206 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khanqah E Bukhariya</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dynamic Custom Islamic App</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Nunito:wght@400;700&family=Comic+Neue:wght@700&family=Amiri+Quran&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --bg-color: #F8FAFC; --text-color: #0F172A; --primary-color: #10B981; --accent-color: #F97316; --card-bg: rgba(255, 255, 255, 0.9); --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); }
-        .dark-theme { --bg-color: #0F172A; --text-color: #F8FAFC; --card-bg: rgba(30, 41, 59, 0.9); --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent;}
-        body { background: var(--bg-color); color: var(--text-color); overflow-x:hidden; transition: background 0.3s, color 0.3s;}
-        a { text-decoration: none; }
-        
-        .header { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--card-bg); backdrop-filter: blur(10px); box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
-        .site-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-color); text-align: center; flex: 1;}
-        
-        .icon-btn { background: none; border: none; padding: 8px; cursor: pointer; border-radius: 12px; transition: background 0.2s;}
-        .icon-btn:hover { background: rgba(16, 185, 129, 0.1); }
-        .icon-btn svg { width: 24px; height: 24px; stroke: var(--text-color); fill: none; transition: stroke 0.3s; }
-        
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.5); z-index: 150; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(2px);}
-        .sidebar { position: fixed; top: 0; left: -320px; width: 280px; height: 100vh; background: var(--card-bg); z-index: 200; transition: transform 0.3s ease-out; padding: 1rem; box-shadow: 2px 0 15px rgba(0,0,0,0.1);}
-        .sidebar-active .sidebar { transform: translateX(320px); }
-        .sidebar-active .overlay { opacity: 1; visibility: visible; }
-        
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 1rem; margin-bottom: 1rem;}
-        .sidebar-title { font-weight: 700; color: var(--primary-color); font-size: 1.1rem; margin-left: 10px;}
-        
-        .nav-links { list-style: none; }
-        .nav-links a { display: block; padding: 0.85rem 1rem; font-size: 0.95rem; font-weight: 500; cursor: pointer; color: var(--text-color); margin-bottom: 5px; border-radius: 12px; transition: 0.2s;}
-        .nav-links a:hover, .nav-links a.active { background: var(--primary-color); color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);}
-        
-        .page-section { display: none; padding: 1.5rem 1rem; max-width: 800px; margin: 0 auto;}
-        .page-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .grid-container { display: grid; gap: 1.2rem; }
-        .glass-card { background: var(--card-bg); padding: 1.2rem; border-radius: 20px; box-shadow: var(--shadow); transition: transform 0.2s;}
-        
-        .img-small { width: 100%; height: 160px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
-        .img-medium { width: 100%; height: 250px; object-fit: cover; border-radius: 16px; margin-bottom: 1rem; }
-        .img-large { width: 100%; height: auto; max-height:450px; object-fit: contain; border-radius: 16px; margin-bottom: 1rem; background: #000; }
-        
-        .card-title { color: var(--primary-color); font-size: 1.2rem; margin-bottom: 0.5rem; font-weight: 700; }
-        .card-content { font-size: 0.95rem; line-height: 1.7; white-space: pre-wrap; margin-bottom: 1rem; }
-        
-        .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .gallery-item img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow);}
-        .empty-text { text-align: center; padding: 2rem; color: #94a3b8; font-style: italic; font-size: 0.95rem; }
+        :root {
+            --app-bg: #FDF8ED; 
+            --app-font: 'Poppins', sans-serif;
+            --arabic-font: 'Amiri Quran', serif;
+            --card-radius: 20px;
+            --nav-bg: #FFC107;
+            --text-color: #333333;
+            --card-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            --transition: all 0.3s ease;
+            --custom-btn-bg: #3b82f6;
+            --custom-btn-text: #ffffff;
+            --custom-btn-radius: 10px;
+        }
 
-        .article-list-item { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-        .article-list-item:hover { transform: translateY(-5px); box-shadow: var(--shadow); border-color: var(--primary-color); }
-        .read-more-text { color: var(--primary-color); font-size: 0.85rem; font-weight: 600; margin-top: 10px; display: inline-block; }
-        
-        .more-articles-heading { margin-bottom: 0.8rem; color: var(--primary-color); font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid rgba(16,185,129,0.2); padding-bottom: 0.5rem;}
-        .more-article-item { display: block; padding: 0.8rem; font-size: 0.95rem; background: rgba(16,185,129,0.05); border-radius: 12px; margin-bottom: 0.8rem; cursor: pointer; font-weight: 600; color: var(--text-color); transition: 0.2s; border: 1px solid transparent; }
-        .more-article-item:hover { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: var(--primary-color); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--app-font); -webkit-tap-highlight-color: transparent; }
+        body { background: var(--app-bg); color: var(--text-color); overflow: hidden; }
 
-        .btn-group { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-        .btn-style { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 14px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; font-size: 0.9rem; flex: 1; transition: 0.2s; text-decoration: none;}
-        .btn-read { background: var(--primary-color); color: white; }
-        .btn-read:hover { background: #059669; }
-        .btn-download { background: var(--accent-color); color: white; }
-        .btn-download:hover { background: #ea580c; }
-        .btn-style svg { width: 18px; height: 18px; stroke: white; fill: none; }
+        #app-container { height: 100vh; width: 100vw; position: relative; }
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transform: translateX(20px); transition: var(--transition); }
+        .screen.active { opacity: 1; visibility: visible; transform: translateX(0); z-index: 10; }
+        .content-scroll { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 90px; }
+
+        .top-banner { background: var(--nav-bg); padding: 25px 20px; border-radius: var(--card-radius); margin-bottom: 20px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; }
+        .top-banner h1 { font-size: 1.5rem; font-weight: 700; }
+        .top-banner p { font-size: 1rem; font-weight: 500; }
+
+        .grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .category-card { border-radius: var(--card-radius); padding: 15px 10px; text-align: center; cursor: pointer; transition: var(--transition); box-shadow: var(--card-shadow); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100px; background-color: #ffffff; border: 2px solid #f0f0f0; }
+        .category-card:active { transform: scale(0.92); }
         
-        .pdf-viewer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-color); z-index: 300; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s ease-in-out; }
-        .pdf-viewer-overlay.active { transform: translateY(0); }
-        .pdf-viewer-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--primary-color); color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .pdf-viewer-title { font-weight: 700; font-size: 1.1rem; }
-        .pdf-viewer-header .icon-btn svg { stroke: white; }
-        #pdf-iframe { flex: 1; width: 100%; border: none; background: #fff; }
+        .category-card img.custom-icon { margin-bottom: 8px; width: 40px; height: 40px; object-fit: contain; }
+        .category-card svg { margin-bottom: 8px; width: 32px; height: 32px; color: var(--text-color); }
+        .category-card span { font-size: 0.8rem; font-weight: 600; }
+
+        .screen-header { display: flex; align-items: center; padding: 15px 20px; gap: 15px; background: transparent; z-index: 20; }
+        .dynamic-btn { background: var(--custom-btn-bg); color: var(--custom-btn-text); border: none; padding: 10px 15px; border-radius: var(--custom-btn-radius); box-shadow: var(--card-shadow); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .screen-header h2 { font-size: 1.2rem; font-weight: 700; flex: 1; text-align: center; margin-right: 40px; }
+
+        .ayat-box { background: white; padding: 20px; border-radius: var(--card-radius); box-shadow: var(--card-shadow); margin-bottom: 15px; border: 2px solid #f0f0f0; display: flex; flex-direction: column; }
+        .ayat-img { width: 100%; max-height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; }
+        .quran-text { font-family: var(--arabic-font); font-size: 1.8rem; text-align: right; line-height: 3rem; margin-bottom: 15px; }
+        .translation-text { font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5; color: #555; }
+        
+        .bottom-nav { position: absolute; bottom: 0; width: 100%; height: 70px; background: var(--nav-bg); display: flex; justify-content: center; gap: 60px; align-items: center; z-index: 40; border-top-left-radius: var(--card-radius); border-top-right-radius: var(--card-radius); box-shadow: 0 -4px 15px rgba(0,0,0,0.05); }
+        .nav-item { background: none; border: none; display: flex; flex-direction: column; align-items: center; color: rgba(0,0,0,0.5); font-size: 0.8rem; font-weight: 700; gap: 5px; transition: var(--transition); cursor: pointer; }
+        .nav-item.active { color: #000; transform: translateY(-5px); }
     </style>
 </head>
 <body>
-    
-    <div class="overlay" id="overlay"></div>
-    
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <span class="sidebar-title">Menu</span>
-            <button class="icon-btn" id="close-sidebar">
-                <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/></svg>
-            </button>
-        </div>
-        <ul class="nav-links">
-            <li><a data-target="articles" data-title="Home" class="active">Home</a></li>
-            <li><a data-target="shajra-nasab" data-title="Shajra-e-Nasab">Shajra-e-Nasab</a></li>
-            <li><a data-target="shajra-tariqat" data-title="Shajra-e-Tariqat">Shajra-e-Tariqat</a></li>
-            <li><a data-target="khanqah" data-title="Khanqah">Khanqah</a></li>
-            <li><a data-target="sawaneh" data-title="Sawaneh Hayat">Sawaneh Hayat</a></li>
-            <li><a data-target="books" data-title="Books / Kutub">Books / Kutub</a></li>
-            <li><a data-target="gallery" data-title="Gallery">Gallery</a></li>
-        </ul>
-    </aside>
-
-    <header class="header">
-        <button class="icon-btn" id="menu-btn">
-            <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
-        </button>
-        <div class="site-title" id="page-title">Khanqah E Bukhariya</div>
-        <button class="icon-btn" id="theme-toggle"></button>
-    </header>
-
-    <main>
-        <div id="articles" class="page-section active"><div id="content-articles" class="grid-container"></div></div>
-        <div id="shajra-nasab" class="page-section"><div id="content-shajra-nasab" class="grid-container"></div></div>
-        <div id="shajra-tariqat" class="page-section"><div id="content-shajra-tariqat" class="grid-container"></div></div>
-        <div id="khanqah" class="page-section"><div id="content-khanqah" class="grid-container"></div></div>
-        <div id="sawaneh" class="page-section"><div id="content-sawaneh" class="grid-container"></div></div>
-        <div id="books" class="page-section"><div id="content-books" class="grid-container"></div></div>
-        <div id="gallery" class="page-section"><div id="content-gallery" class="gallery-grid"></div></div>
-    </main>
-
-    <!-- Full Screen PDF Viewer -->
-    <div id="pdf-viewer-overlay" class="pdf-viewer-overlay">
-        <div class="pdf-viewer-header">
-            <span class="pdf-viewer-title">PDF Reader</span>
-            <button class="icon-btn" onclick="window.closePDFViewer()">
-                <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/></svg>
-            </button>
-        </div>
-        <iframe id="pdf-iframe" src=""></iframe>
-    </div>
-        <script>
-        let currentPage = 'articles';
-        let currentView = 'list';
-        window.articlesData = []; 
-
-        history.replaceState({page: 'articles', view: 'list'}, "", "#articles");
-
-        function switchPageUI(target, title) {
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-            document.getElementById(target).classList.add('active');
-            document.querySelector(`[data-target="${target}"]`).classList.add('active');
-            
-            if (target === 'articles') {
-                document.getElementById('page-title').innerText = "Khanqah E Bukhariya";
-            } else {
-                document.getElementById('page-title').innerText = title;
-            }
-            window.scrollTo(0,0);
-        }
-
-        document.getElementById('menu-btn').addEventListener('click', () => {
-            document.body.classList.add('sidebar-active');
-        });
-
-        const closeMenu = () => {
-            document.body.classList.remove('sidebar-active');
-        };
-
-        document.getElementById('close-sidebar').addEventListener('click', () => closeMenu());
-        document.getElementById('overlay').addEventListener('click', () => closeMenu());
-
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                const target = e.target.getAttribute('data-target');
-                const title = e.target.getAttribute('data-title');
-                
-                if (target === 'articles' && window.articlesData.length > 0) {
-                    window.renderArticlesList();
-                }
-
-                switchPageUI(target, title);
-                currentPage = target;
-                currentView = 'list';
-                
-                history.pushState({page: target, view: 'list'}, "", "#" + target);
-                closeMenu();
-            });
-        });
-
-        window.renderArticlesList = function() {
-            const container = document.getElementById('content-articles');
-            container.innerHTML = '';
-            
-            window.articlesData.forEach((data, index) => {
-                let imgClass = "img-small"; 
-                let imgHtml = data.imageUrl ? `<img src="${data.imageUrl}" class="${imgClass}">` : '';
-                let titleHtml = data.title ? `<h3 class="card-title">${data.title}</h3>` : '<h3 class="card-title">Bila Unwan</h3>';
-                
-                container.innerHTML += `
-                    <div class="glass-card article-list-item" onclick="window.openArticleDetail(${index}, true)">
-                        ${imgHtml}
-                        ${titleHtml}
-                        <span class="read-more-text">Pura Mazmun Padhein ➔</span>
+        <div id="app-container">
+        
+        <!-- HOME SCREEN -->
+        <section id="screen-home" class="screen active">
+            <main class="content-scroll">
+                <div class="top-banner">
+                    <div>
+                        <h1 id="app-greeting">Assalamu Alaikum</h1>
+                        <p id="app-subgreeting">Let's learn today!</p>
                     </div>
-                `;
-            });
-            currentView = 'list';
-        };
-
-        window.openArticleDetail = function(index, pushHistory = true) {
-            const container = document.getElementById('content-articles');
-            const data = window.articlesData[index];
-            
-            let imgClass = data.imageSize === "small" ? "img-small" : (data.imageSize === "large" ? "img-large" : "img-medium");
-            let imgHtml = data.imageUrl ? `<img src="${data.imageUrl}" class="${imgClass}">` : '';
-            let titleHtml = data.title ? `<h3 class="card-title">${data.title}</h3>` : '';
-            let contentHtml = data.content ? `<div class="card-content">${data.content}</div>` : '';
-            
-            // Google Drive Link Automatic Parsing Logic
-            let pdfViewLink = '';
-            let pdfDownloadLink = '';
-            
-            if (data.pdfUrl) {
-                let fileIdMatch = data.pdfUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
-                if (fileIdMatch && fileIdMatch[1]) {
-                    let fileId = fileIdMatch[1];
-                    pdfViewLink = `https://drive.google.com/file/d/${fileId}/preview`;
-                    pdfDownloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                } else {
-                    pdfViewLink = data.pdfUrl;
-                    pdfDownloadLink = data.pdfUrl;
-                }
-            }
-
-            let pdfHtml = data.pdfUrl ? `
-                <div class="btn-group">
-                    <button class="btn-style btn-read" onclick="window.openPDFViewer('${pdfViewLink}')">
-                        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Read
-                    </button>
-                    <a href="${pdfDownloadLink}" class="btn-style btn-download">
-                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download
-                    </a>
                 </div>
-            ` : '';
-            
-            let detailHtml = `
-                <div class="glass-card">
-                    ${imgHtml}
-                    ${titleHtml}
-                    ${contentHtml}
-                    ${pdfHtml}
+                <div class="grid-container" id="category-grid">
+                    <!-- Dynamic Categories will appear here -->
                 </div>
-            `;
+            </main>
+        </section>
 
-            if (window.articlesData.length > 1) {
-                let moreHtml = `<div class="more-articles-heading">Mazed Mazameen (More Articles)</div>`;
-                window.articlesData.forEach((item, i) => {
-                    if (i !== index && item.title) {
-                        moreHtml += `<div class="more-article-item" onclick="window.openArticleDetail(${i}, true)">📄 ${item.title}</div>`;
-                    }
-                });
-                detailHtml += `<div class="glass-card" style="margin-top: 1.5rem;">${moreHtml}</div>`;
-            }
+        <!-- LESSON SCREEN -->
+        <section id="screen-lesson" class="screen">
+            <div class="screen-header">
+                <button class="dynamic-btn" onclick="navigate('screen-home')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <h2 id="lesson-title">Lesson</h2>
+            </div>
+            <main class="content-scroll" id="lesson-content-area"></main>
+        </section>
 
-            container.innerHTML = detailHtml;
-            window.scrollTo(0,0);
-            currentView = 'detail';
-            
-            if (pushHistory) {
-                history.pushState({page: 'articles', view: 'detail', articleIndex: index}, "", "#article-" + index);
-            }
-        };
-
-        window.openPDFViewer = function(url) {
-            document.getElementById('pdf-iframe').src = url;
-            document.getElementById('pdf-viewer-overlay').classList.add('active');
-            history.pushState({pdfOpen: true, ...history.state}, "", "#pdf-reader");
-        };
-
-        window.closePDFViewer = function() {
-            if(document.getElementById('pdf-viewer-overlay').classList.contains('active')) {
-                history.back(); 
-            }
-        };
-
-        window.addEventListener('popstate', (e) => {
-            const pdfOverlay = document.getElementById('pdf-viewer-overlay');
-            if (pdfOverlay.classList.contains('active')) {
-                pdfOverlay.classList.remove('active');
-                document.getElementById('pdf-iframe').src = '';
-            }
-
-            if (e.state && e.state.pdfOpen) {
-                pdfOverlay.classList.add('active');
-                return;
-            }
-
-            if (document.body.classList.contains('sidebar-active')) {
-                closeMenu();
-                history.pushState(e.state || {page: currentPage, view: currentView}, "", location.hash);
-                return;
-            }
-
-            if (e.state) {
-                currentPage = e.state.page;
-                currentView = e.state.view || 'list';
-                
-                if (currentPage === 'articles' && currentView === 'detail') {
-                    window.openArticleDetail(e.state.articleIndex, false);
-                    switchPageUI('articles', 'Khanqah E Bukhariya');
-                } else {
-                    if (currentPage === 'articles') {
-                        window.renderArticlesList();
-                    }
-                    switchPageUI(currentPage, document.querySelector(`[data-target="${currentPage}"]`).getAttribute('data-title'));
-                }
-            } else {
-                currentPage = 'articles';
-                currentView = 'list';
-                if(window.articlesData.length > 0) window.renderArticlesList();
-                switchPageUI('articles', 'Khanqah E Bukhariya');
-            }
-        });
-
-        const themeBtn = document.getElementById('theme-toggle');
-        const body = document.body;
-        const sunIcon = `<svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke-width="2" stroke-linecap="round"/></svg>`;
-        const moonIcon = `<svg viewBox="0 0 24 24" stroke="currentColor"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-
-        if (localStorage.getItem('theme') === 'dark') { body.classList.add('dark-theme'); themeBtn.innerHTML = sunIcon; } 
-        else { themeBtn.innerHTML = moonIcon; }
-
-        themeBtn.addEventListener('click', () => {
-            body.classList.toggle('dark-theme');
-            if (body.classList.contains('dark-theme')) { localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = sunIcon; } 
-            else { localStorage.setItem('theme', 'light'); themeBtn.innerHTML = moonIcon; }
-        });
-        </script>
-            <!-- Firebase Data Fetching -->
+        <!-- BOTTOM NAV -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="navigate('screen-home')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="26" height="26" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                <span>Home</span>
+            </button>
+        </nav>
+        </div>
+            <!-- Firebase Real-time Sync Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
-        const app = initializeApp({
-            apiKey: "AIzaSyChM3EQOo2UNmwFnHwLc3ooq63eEm5uuh8",
-            authDomain: "khanqahebukhariya.firebaseapp.com",
-            projectId: "khanqahebukhariya",
-            storageBucket: "khanqahebukhariya.firebasestorage.app",
-            messagingSenderId: "459052789180",
-            appId: "1:459052789180:web:67ef47ee77da16275a4fb9"
-        });
+        const firebaseConfig = {
+            apiKey: "AIzaSyARipbpqrtoB5dsH05xGyqc8mM30sCoPQc",
+            authDomain: "kids-islamic-31aff.firebaseapp.com",
+            projectId: "kids-islamic-31aff",
+            storageBucket: "kids-islamic-31aff.firebasestorage.app",
+            messagingSenderId: "131783238650",
+            appId: "1:131783238650:web:e7fe13d44cb6dc1410ba43",
+            measurementId: "G-N7E3JJJM4Z"
+        };
+
+        const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const categories = ["articles", "shajra-nasab", "shajra-tariqat", "khanqah", "sawaneh", "books", "gallery"];
-        
-        async function fetchAllData() {
-            let containers = {};
-            categories.forEach(c => { containers[c] = document.getElementById(`content-${c}`); if(containers[c]) containers[c].innerHTML = ''; });
-            window.articlesData = []; 
-            
-            try {
-                const q = query(collection(db, "website_content"), orderBy("timestamp", "desc"));
-                const snapshot = await getDocs(q);
-                let count = { articles:0, "shajra-nasab":0, "shajra-tariqat":0, khanqah:0, sawaneh:0, books:0, gallery:0 };
-                
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const cat = data.category;
-                    
-                    if(containers[cat]) {
-                        count[cat]++;
-                        
-                        if (cat === "articles") {
-                            window.articlesData.push(data);
-                        } else if (cat === "gallery" && data.imageUrl) {
-                            containers[cat].innerHTML += `<div class="gallery-item"><img src="${data.imageUrl}"></div>`;
-                        } else {
-                            let imgClass = data.imageSize === "small" ? "img-small" : (data.imageSize === "large" ? "img-large" : "img-medium");
-                            let imgHtml = data.imageUrl ? `<img src="${data.imageUrl}" class="${imgClass}">` : '';
-                            let titleHtml = data.title ? `<h3 class="card-title">${data.title}</h3>` : '';
-                            let contentHtml = data.content ? `<div class="card-content">${data.content}</div>` : '';
-                            
-                            // Google Drive Link Automatic Parsing for other categories too
-                            let pdfViewLink = '';
-                            let pdfDownloadLink = '';
-                            
-                            if (data.pdfUrl) {
-                                let fileIdMatch = data.pdfUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
-                                if (fileIdMatch && fileIdMatch[1]) {
-                                    let fileId = fileIdMatch[1];
-                                    pdfViewLink = `https://drive.google.com/file/d/${fileId}/preview`;
-                                    pdfDownloadLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                                } else {
-                                    pdfViewLink = data.pdfUrl;
-                                    pdfDownloadLink = data.pdfUrl;
-                                }
-                            }
 
-                            let pdfHtml = data.pdfUrl ? `
-                                <div class="btn-group">
-                                    <button class="btn-style btn-read" onclick="window.openPDFViewer('${pdfViewLink}')">
-                                        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Read
-                                    </button>
-                                    <a href="${pdfDownloadLink}" class="btn-style btn-download">
-                                        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Download
-                                    </a>
-                                </div>
-                            ` : '';
-                            
-                            containers[cat].innerHTML += `
-                                <div class="glass-card">
-                                    ${imgHtml}
-                                    ${titleHtml}
-                                    ${contentHtml}
-                                    ${pdfHtml}
-                                </div>
-                            `;
-                        }
-                    }
-                });
-                
-                if (window.articlesData.length > 0) {
-                    window.renderArticlesList();
-                } else if (containers['articles']) {
-                    containers['articles'].innerHTML = `<div class="empty-text">Abhi is page par maloomat mojood nahi hain.</div>`;
+        let categoriesData = [];
+        let iconsData = [];
+
+        // Listen to Settings
+        onSnapshot(doc(db, "appDatabase", "settings"), (docSnap) => {
+            if (docSnap.exists()) {
+                const savedSettings = docSnap.data();
+                document.documentElement.style.setProperty('--app-bg', savedSettings.appBg || '#FDF8ED');
+                document.documentElement.style.setProperty('--nav-bg', savedSettings.navBg || '#FFC107');
+                document.documentElement.style.setProperty('--app-font', savedSettings.primaryFont || "'Poppins', sans-serif");
+                document.documentElement.style.setProperty('--arabic-font', savedSettings.arabicFont || "'Amiri Quran', serif");
+                document.documentElement.style.setProperty('--card-radius', (savedSettings.shape || 20) + 'px');
+                if(savedSettings.greetingText) document.getElementById('app-greeting').innerText = savedSettings.greetingText;
+            }
+        });
+
+        // Listen to Shapes
+        onSnapshot(doc(db, "appDatabase", "shapes"), (docSnap) => {
+            if (docSnap.exists()) {
+                const savedShapes = docSnap.data().items || [];
+                if(savedShapes.length > 0) {
+                    const latestShape = savedShapes[savedShapes.length - 1];
+                    document.documentElement.style.setProperty('--custom-btn-bg', latestShape.bg);
+                    document.documentElement.style.setProperty('--custom-btn-text', latestShape.textColor);
+                    document.documentElement.style.setProperty('--custom-btn-radius', latestShape.radius + 'px');
                 }
+            }
+        });
 
-                categories.forEach(c => {
-                    if(c !== 'articles' && count[c] === 0 && containers[c]) {
-                        containers[c].innerHTML = `<div class="empty-text">Abhi is page par maloomat mojood nahi hain.</div>`;
-                    }
-                });
-            } catch(e) { console.log(e); }
+        // Listen to Custom Icons & Categories
+        onSnapshot(doc(db, "appDatabase", "icons"), (docSnap) => {
+            if (docSnap.exists()) { iconsData = docSnap.data().items || []; renderContent(); }
+        });
+        onSnapshot(doc(db, "appDatabase", "categories"), (docSnap) => {
+            if (docSnap.exists()) { categoriesData = docSnap.data().items || []; renderContent(); }
+        });
+
+        function renderContent() {
+            const grid = document.getElementById('category-grid');
+            grid.innerHTML = '';
+            
+            if(categoriesData.length === 0) {
+                grid.innerHTML = '<p style="grid-column: span 3; text-align: center; color: #888;">Fetching data from Firebase...</p>';
+                return;
+            }
+
+            categoriesData.forEach((cat, index) => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.style.backgroundColor = cat.iconColor || '#ffffff';
+                
+                let iconHTML = iconsData[index] 
+                    ? `<img src="${iconsData[index]}" class="custom-icon" alt="icon">` 
+                    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
+
+                card.innerHTML = `${iconHTML} <span>${cat.title}</span>`;
+                card.onclick = () => window.openLesson(cat);
+                grid.appendChild(card);
+            });
         }
-        fetchAllData();
+
+        window.openLesson = function(category) {
+            document.getElementById('lesson-title').innerText = category.title;
+            const contentArea = document.getElementById('lesson-content-area');
+            contentArea.innerHTML = '';
+
+            const ayats = category.items || [];
+            ayats.forEach((item) => {
+                const box = document.createElement('div');
+                box.className = 'ayat-box';
+                let imageHTML = item.optImage ? `<img src="${item.optImage}" class="ayat-img" style="display:block;">` : '';
+
+                box.innerHTML = `
+                    ${imageHTML}
+                    <div class="quran-text" style="color: ${item.textColor || '#111'};">${item.arabic}</div>
+                    <div class="translation-text">${item.translation}</div>
+                    <button class="dynamic-btn" style="width: 50px; height: 50px; border-radius: 50%; padding: 0;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </button>
+                `;
+                contentArea.appendChild(box);
+            });
+            window.navigate('screen-lesson');
+        }
+
+        window.navigate = function(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
     </script>
 </body>
 </html>
